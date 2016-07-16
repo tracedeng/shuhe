@@ -10,11 +10,17 @@ class Appliances(models.Model):
     description = models.CharField(max_length=256)
     price = models.BigIntegerField()
 
+    def __unicode__(self):
+        return u"%s %s" % (self.description, self.identification)
+
 
 class Agent(models.Model):
     name = models.CharField(max_length=128)
     phone = models.CharField(max_length=32)
     wechat = models.CharField(max_length=64)
+
+    def __unicode__(self):
+        return self.name
 
 
 class Maintenance(models.Model):
@@ -25,6 +31,9 @@ class Maintenance(models.Model):
     apply_time = models.TimeField()
     handled = models.CharField(max_length=8)
 
+    def __unicode__(self):
+        return self.name
+
 
 class Order(models.Model):
     receipt_address = models.CharField(max_length=128)
@@ -33,3 +42,6 @@ class Order(models.Model):
     order_time = models.TimeField()
     payed = models.CharField(max_length=8)
     order_index = models.CharField(max_length=64)
+
+    def __unicode__(self):
+        return self.agent
