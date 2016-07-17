@@ -16,8 +16,10 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from shuhe.views import test
+from books.views import contact
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^test/', test),
 ]
+

@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from __future__ import unicode_literals
 
 from django.db import models
@@ -6,18 +8,18 @@ from django.db import models
 
 
 class Appliances(models.Model):
-    identification = models.CharField(max_length=64)
-    description = models.CharField(max_length=256)
-    price = models.BigIntegerField()
+    identification = models.CharField(max_length=64, verbose_name="设备编号")
+    description = models.CharField(max_length=256, verbose_name="设备")
+    price = models.BigIntegerField(verbose_name="价格")
 
     def __unicode__(self):
         return u"%s %s" % (self.description, self.identification)
 
 
 class Agent(models.Model):
-    name = models.CharField(max_length=128)
-    phone = models.CharField(max_length=32)
-    wechat = models.CharField(max_length=64)
+    name = models.CharField(max_length=128, verbose_name="代理商")
+    phone = models.CharField(max_length=32, verbose_name="代理商电话")
+    wechat = models.CharField(max_length=64, verbose_name="代理商微信")
 
     def __unicode__(self):
         return self.name
