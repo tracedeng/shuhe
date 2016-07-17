@@ -17,9 +17,11 @@ from django.conf.urls import url
 from django.contrib import admin
 from shuhe.views import test
 #from books.views import contact
+from market import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^test/', test),
+    url(r'^p/ge/$', views.appliances),
 ]
 
