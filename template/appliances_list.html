@@ -7,10 +7,48 @@
         <div class="row">
             <div class="col-md-12 col-xs-12">
                 <ul class="nav nav-tabs">
-                    <li role="presentation" class="active"><a href="#">全屋净水机</a></li>
-                    <li role="presentation"><a href="#">全屋软水机</a></li>
-                    <li role="presentation"><a href="#">末端直饮机</a></li>
+                    <li role="presentation" class="active"><a href="#purifier" aria-controls="purifier" role="tab" data-toggle="tab">全屋净水机</a></li>
+                    <li role="presentation"><a href="#softener" aria-controls="softener" role="tab" data-toggle="tab">全屋软水机</a></li>
+                    <li role="presentation"><a href="#drinking" aria-controls="drinking" role="tab" data-toggle="tab">末端直饮机</a></li>
                 </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane fade in active" id="purifier">
+                        <table class="table table-striped table-bordered table-hover table-responsive">
+                            {% for tr in purifier %}
+                                <tr>
+                                {% for td in tr %}
+                                    <td>td</td>
+                                {% endfor %}
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade" id="softener">
+                        <table class="table table-striped table-bordered table-hover table-responsive">
+                            {% for tr in softener %}
+                                <tr>
+                                {% for td in tr %}
+                                    <td>td</td>
+                                {% endfor %}
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade" id="drinking">
+                        <table class="table table-striped table-bordered table-hover table-responsive">
+                            {% for tr in drinking %}
+                                <tr>
+                                {% for td in tr %}
+                                    <td>td</td>
+                                {% endfor %}
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+
                 <!--<div class="panel panel-default">-->
                     <!--<div class="panel-heading text-center">简单的表单</div>-->
                     <!--<div class="panel-body query">-->

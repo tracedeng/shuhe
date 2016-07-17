@@ -33,6 +33,9 @@ class Softener(Appliances):
     maximum_grains = models.CharField(max_length=16, verbose_name="最大格令数")
     maximum_iron_treatment = models.CharField(max_length=16, verbose_name="最大处理铁含量")
 
+    class Meta:
+        verbose_name_plural = "软水机"
+
 
 class Purifier(Appliances):
     filtering_accuracy = models.CharField(max_length=16, verbose_name="过滤精度")
@@ -41,6 +44,9 @@ class Purifier(Appliances):
     water_pressure = models.CharField(max_length=32, verbose_name="工作水压")
     water_temperature = models.CharField(max_length=32, verbose_name="工作水温")
     cartridge_life = models.CharField(max_length=32, verbose_name="滤芯寿命")
+
+    class Meta:
+        verbose_name_plural = "净水机"
 
 
 class Drinking(Appliances):
@@ -51,6 +57,9 @@ class Drinking(Appliances):
     activated_carbon = models.CharField(max_length=32, verbose_name="前置活性碳")
     ro_film = models.CharField(max_length=32, verbose_name="Ro膜")
 
+    class Meta:
+        verbose_name_plural = "直饮机"
+
 
 class Agent(models.Model):
     name = models.CharField(max_length=128, verbose_name="代理商")
@@ -59,6 +68,9 @@ class Agent(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    class Meta:
+        verbose_name_plural = "合作伙伴"
 
 
 class Maintenance(models.Model):
@@ -72,6 +84,9 @@ class Maintenance(models.Model):
     def __unicode__(self):
         return self.name
 
+    class Meta:
+        verbose_name_plural = "官方维保"
+
 
 class Order(models.Model):
     receipt_address = models.CharField(max_length=128)
@@ -83,3 +98,6 @@ class Order(models.Model):
 
     def __unicode__(self):
         return self.agent
+
+    class Meta:
+        verbose_name_plural = "订单"
