@@ -90,3 +90,4 @@ ENV/
 db.sqlite3
 static/admin
 books
+template/contact_form.html
