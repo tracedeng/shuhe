@@ -3,19 +3,13 @@
 {% block title %}GE产品{% endblock %}
 
 {% block headstyle %}
-body {
-    color: #333;
-    background-color: #F7F7F7;
-}
 
-.panel {
+.nav {
     margin-top: 10px;
-    box-shadow: 0 0px 8px rgba(0,0,0,.3);
 }
 
-.panel-heading,
-.panel-footer {
-    background-image: linear-gradient(#ddd,#bbb);
+.tab-content {
+    margin-top: 5px;
 }
 
 .table {
@@ -32,7 +26,7 @@ body {
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12 col-xs-12">
-                <ul class="nav nav-tabs">
+                <ul class="nav nav-pills">
                     <li role="presentation" class="active"><a href="#purifier" aria-controls="purifier" role="tab" data-toggle="tab">全屋净水机</a></li>
                     <li role="presentation"><a href="#softener" aria-controls="softener" role="tab" data-toggle="tab">全屋软水机</a></li>
                     <li role="presentation"><a href="#drinking" aria-controls="drinking" role="tab" data-toggle="tab">末端直饮机</a></li>

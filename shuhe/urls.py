@@ -23,5 +23,6 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^test/', test),
     url(r'^p/ge/$', views.appliances),
+    url(r'^p/lg/$', views.lifegear),
 ]
 
