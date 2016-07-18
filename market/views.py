@@ -3,6 +3,7 @@ from django.shortcuts import render, render_to_response
 
 # Create your views here.
 from models import Softener, Purifier, Drinking
+from models import EquipmentCategories
 
 
 def appliances(request):
@@ -51,20 +52,7 @@ def lifegear(request):
     :param request:
     :return:
     """
-    hidden_field = ('id', 'description', 'price')
-    d = {}
-    for iter_class in (Softener, Purifier, Drinking):
-        fields = iter_class._meta.get_fields()  # 所有model fields
-        values = iter_class.objects.all().values()  # 所有model 行
-        items = []
-        for field in fields:
-            item = []
-            if field.name in hidden_field:
-                continue
-            item.append(field.verbose_name)
-            for value in values:
-                item.append(value[field.name])
-            items.append(item)
-        d[iter_class.__name__.lower()] = items
+    ventilation = EquipmentCategories.objects.filter(group="ventilation").values()
+    aeration = EquipmentCategories.objects.filter(group="aeration").values()
 
-    return render_to_response('appliances_list.html', d)
+    return render_to_response('equipment_list.html', {"ventilation": ventilation, "aeration": aeration})

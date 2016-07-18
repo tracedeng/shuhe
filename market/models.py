@@ -73,8 +73,20 @@ class Equipment(models.Model):
         # return u"%s %s" % (self.name, self.identification)
 
 
+class EquipmentCategories(models.Model):
+    identification = models.CharField(max_length=32, verbose_name="大类")
+    img_name = models.CharField(max_length=64, verbose_name="图片名称")
+    group = models.CharField(max_length=64, verbose_name="组")
+
+    class Meta:
+        verbose_name_plural = "乐奇电器大类"
+
+    # def __unicode__(self):
+    #     return self.identification
+
+
 class VentilationSpec(models.Model):
-    operation_mode = models.CharField(max_length=16, verbose_name="主操作模式")
+    operation_mode = models.CharField(max_length=32, verbose_name="主操作模式")
     secondary_mode = models.CharField(max_length=16, verbose_name="二级操作模式")
     power_consumption = models.CharField(max_length=16, verbose_name="消耗电量")
     # price = models.BigIntegerField(verbose_name="价格")

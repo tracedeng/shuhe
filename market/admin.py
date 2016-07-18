@@ -27,7 +27,7 @@ class EquipmentAdmin(admin.ModelAdmin):
 
 class VentilationSpecAdmin(admin.ModelAdmin):
     list_display = ('operation_mode', 'secondary_mode', 'power_consumption', 'ventilation_volume', 'air_volume',
-                    'noise', 'maximum_pressure', 'host_weight', 'pipeline')
+                    'noise', 'maximum_pressure', 'host_weight', 'pipeline', 'size')
     filter_horizontal = ("equipment",)
 
 
