@@ -28,34 +28,40 @@ class EquipmentAdmin(admin.ModelAdmin):
 class VentilationSpecAdmin(admin.ModelAdmin):
     list_display = ('operation_mode', 'secondary_mode', 'power_consumption', 'ventilation_volume', 'air_volume',
                     'noise', 'maximum_pressure', 'host_weight', 'pipeline')
+    filter_horizontal = ("equipment",)
 
 
 class HeatSpecAdmin(admin.ModelAdmin):
     list_display = ('air_volume', 'power_consumption', 'noise', 'recovery_rate', 'applicable_area', 'host_size',
                     'maximum_pressure', 'net_weight', 'pipeline')
+    filter_horizontal = ("equipment",)
 
 
 class AirSpecAdmin(admin.ModelAdmin):
     list_display = ('host_size', 'hoisting_size', 'air_volume', 'weight', 'pipeline')
+    filter_horizontal = ("equipment",)
 
 
 class SoundOffSpecAdmin(admin.ModelAdmin):
     list_display = ('voltage', 'power_consumption', 'ventilation_volume', 'noise', 'maximum_pressure', 'opening_size',
                     'host_weight', 'pipeline')
+    filter_horizontal = ("equipment",)
 
 
 class StrongSpecAdmin(admin.ModelAdmin):
     list_display = ('voltage', 'power_consumption', 'ventilation_volume', 'noise', 'maximum_pressure', 'opening_size',
                     'host_weight', 'pipeline')
+    filter_horizontal = ("equipment",)
 
 
 class CircularSpecAdmin(admin.ModelAdmin):
     list_display = ('power_consumption', 'air_volume', 'noise', 'installation_dimensions', 'applicable_area', 'weight')
-
+    filter_horizontal = ("equipment",)
 
 class HiddenSpecAdmin(admin.ModelAdmin):
     list_display = ('voltage', 'power_consumption', 'ventilation_volume', 'noise', 'maximum_pressure', 'host_size',
                     'host_weight', 'pipeline')
+    filter_horizontal = ("equipment",)
 
 
 class AgentAdmin(admin.ModelAdmin):

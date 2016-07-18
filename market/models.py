@@ -68,6 +68,10 @@ class Equipment(models.Model):
     class Meta:
         verbose_name_plural = "乐奇电器型号"
 
+    def __unicode__(self):
+        return self.identification
+        # return u"%s %s" % (self.name, self.identification)
+
 
 class VentilationSpec(models.Model):
     operation_mode = models.CharField(max_length=16, verbose_name="主操作模式")
