@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 from market.models import Softener, Purifier,Drinking, Agent, Maintenance, Order, Equipment, HeatSpec, AirSpec, \
-    SoundOffSpec, StrongSpec, CircularSpec, HiddenSpec, VentilationSpec
+    SoundOffSpec, StrongSpec, CircularSpec, HiddenSpec, VentilationSpec, EquipmentCategories
 
 
 class SoftenerAdmin(admin.ModelAdmin):
@@ -23,6 +23,10 @@ class DrinkingAdmin(admin.ModelAdmin):
 
 class EquipmentAdmin(admin.ModelAdmin):
     list_display = ('identification', 'description', 'name')
+
+
+class EquipmentCategoriesAdmin(admin.ModelAdmin):
+    list_display = ('categories', 'img_name', 'group')
 
 
 class VentilationSpecAdmin(admin.ModelAdmin):
@@ -83,6 +87,7 @@ admin.site.register(Drinking, DrinkingAdmin)
 
 # LifeGear
 admin.site.register(Equipment, EquipmentAdmin)
+admin.site.register(EquipmentCategories, EquipmentCategoriesAdmin)
 admin.site.register(VentilationSpec, VentilationSpecAdmin)
 admin.site.register(HeatSpec, HeatSpecAdmin)
 admin.site.register(AirSpec, AirSpecAdmin)

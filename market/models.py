@@ -74,9 +74,10 @@ class Equipment(models.Model):
 
 
 class EquipmentCategories(models.Model):
-    identification = models.CharField(max_length=32, verbose_name="大类")
+    categories = models.CharField(max_length=32, verbose_name="大类")
     img_name = models.CharField(max_length=64, verbose_name="图片名称")
-    group = models.CharField(max_length=64, verbose_name="组")
+    group = models.CharField(max_length=64, verbose_name="组",
+                             choices=(('ventilation', '浴室暖房换气设备'), ('aeration', '新风通风设备')))
 
     class Meta:
         verbose_name_plural = "乐奇电器大类"
