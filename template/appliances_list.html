@@ -2,6 +2,32 @@
 
 {% block title %}GE产品{% endblock %}
 
+{% block headstyle %}
+body {
+    color: #333;
+    background-color: #F7F7F7;
+}
+
+.panel {
+    margin-top: 10px;
+    box-shadow: 0 0px 8px rgba(0,0,0,.3);
+}
+
+.panel-heading,
+.panel-footer {
+    background-image: linear-gradient(#ddd,#bbb);
+}
+
+.table {
+    font-size: 11px;
+}
+
+.table td,
+.table th{
+    text-align: center;
+}
+{% endblock %}
+
 {% block body %}
     <div class="container-fluid">
         <div class="row">
@@ -30,7 +56,7 @@
                             {% for tr in softener %}
                                 <tr>
                                 {% for td in tr %}
-                                    <td>{{ td }}</td
+                                    <td>{{ td }}</td>
                                 {% endfor %}
                                 </tr>
                             {% endfor %}
@@ -41,7 +67,7 @@
                             {% for tr in drinking %}
                                 <tr>
                                 {% for td in tr %}
-                                    <td>{{ td }}</td
+                                    <td>{{ td }}</td>
                                 {% endfor %}
                                 </tr>
                             {% endfor %}
