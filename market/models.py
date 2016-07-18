@@ -85,11 +85,12 @@ class VentilationSpec(models.Model):
     maximum_pressure = models.CharField(max_length=16, verbose_name="最大静压值")
     host_weight = models.CharField(max_length=16, verbose_name="主机重量")
     pipeline = models.CharField(max_length=16, verbose_name="连接管线")
+    size = models.CharField(max_length=32, verbose_name="开孔尺寸/主机尺寸/安装尺寸")
 
     equipment = models.ManyToManyField(Equipment, verbose_name='型号')
 
     class Meta:
-        verbose_name_plural = "乐奇换气设备规格"
+        verbose_name_plural = "乐奇浴室暖房换气设备规格"
 
 
 class HeatSpec(models.Model):
@@ -181,7 +182,7 @@ class CircularSpec(models.Model):
     equipment = models.ManyToManyField(Equipment, verbose_name='型号')
 
     class Meta:
-        verbose_name_plural = "乐奇循环扇规格"
+        verbose_name_plural = "乐奇节能循环扇规格"
 
 
 class Agent(models.Model):
