@@ -33,7 +33,7 @@ class Softener(Appliances):
     maximum_iron_treatment = models.CharField(max_length=16, verbose_name="最大处理铁含量")
 
     class Meta:
-        verbose_name_plural = "软水机"
+        verbose_name_plural = "GE软水机"
 
 
 class Purifier(Appliances):
@@ -45,7 +45,7 @@ class Purifier(Appliances):
     cartridge_life = models.CharField(max_length=32, verbose_name="滤芯寿命")
 
     class Meta:
-        verbose_name_plural = "净水机"
+        verbose_name_plural = "GE净水机"
 
 
 class Drinking(Appliances):
@@ -57,7 +57,7 @@ class Drinking(Appliances):
     ro_film = models.CharField(max_length=32, verbose_name="Ro膜")
 
     class Meta:
-        verbose_name_plural = "直饮机"
+        verbose_name_plural = "GE直饮机"
 
 
 class Equipment(models.Model):
@@ -82,6 +82,8 @@ class VentilationSpec(models.Model):
     host_weight = models.CharField(max_length=16, verbose_name="主机重量")
     pipeline = models.CharField(max_length=16, verbose_name="连接管线")
 
+    equipment = models.ManyToManyField(Equipment, verbose_name='型号')
+
     class Meta:
         verbose_name_plural = "乐奇换气设备规格"
 
@@ -99,8 +101,10 @@ class HeatSpec(models.Model):
     net_weight = models.CharField(max_length=16, verbose_name="净重")
     pipeline = models.CharField(max_length=16, verbose_name="进气管线排气管线")
 
+    equipment = models.ManyToManyField(Equipment, verbose_name='型号')
+
     class Meta:
-        verbose_name_plural = "新风全热空气净化机（交换机）设备规格"
+        verbose_name_plural = "乐奇新风全热空气净化机（交换机）设备规格"
 
 
 class AirSpec(models.Model):
@@ -112,8 +116,10 @@ class AirSpec(models.Model):
     weight = models.CharField(max_length=16, verbose_name="重量")
     pipeline = models.CharField(max_length=16, verbose_name="连接管线")
 
+    equipment = models.ManyToManyField(Equipment, verbose_name='型号')
+
     class Meta:
-        verbose_name_plural = "空气净化箱规格"
+        verbose_name_plural = "乐奇空气净化箱规格"
 
 
 class Ventilator(models.Model):
@@ -136,22 +142,28 @@ class Ventilator(models.Model):
 class SoundOffSpec(Ventilator):
     opening_size = models.CharField(max_length=16, verbose_name="开孔尺寸")
 
+    equipment = models.ManyToManyField(Equipment, verbose_name='型号')
+
     class Meta:
-        verbose_name_plural = "超静音换气扇规格"
+        verbose_name_plural = "乐奇超静音换气扇规格"
 
 
 class StrongSpec(Ventilator):
     opening_size = models.CharField(max_length=16, verbose_name="开孔/安装尺寸")
 
+    equipment = models.ManyToManyField(Equipment, verbose_name='型号')
+
     class Meta:
-        verbose_name_plural = "劲风换气扇规格"
+        verbose_name_plural = "乐奇劲风换气扇规格"
 
 
 class HiddenSpec(Ventilator):
     host_size = models.CharField(max_length=16, verbose_name="主机尺寸")
 
+    equipment = models.ManyToManyField(Equipment, verbose_name='型号')
+
     class Meta:
-        verbose_name_plural = "隐藏式换气扇规格"
+        verbose_name_plural = "乐奇隐藏式换气扇规格"
 
 
 class CircularSpec(models.Model):
@@ -162,8 +174,10 @@ class CircularSpec(models.Model):
     applicable_area = models.CharField(max_length=16, verbose_name="适用面积")
     weight = models.CharField(max_length=16, verbose_name="重量")
 
+    equipment = models.ManyToManyField(Equipment, verbose_name='型号')
+
     class Meta:
-        verbose_name_plural = "循环扇规格"
+        verbose_name_plural = "乐奇循环扇规格"
 
 
 class Agent(models.Model):
