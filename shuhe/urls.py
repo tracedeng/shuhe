@@ -25,5 +25,6 @@ urlpatterns = [
     url(r'^p/ge/$', views.appliances),
     url(r'^p/lg/$', views.lifegear),
     url(r'^p/lg/([A-Za-z0-9]+)/$', views.lifegear_sub),
+    url(r'^$', views.index),
 ]
 

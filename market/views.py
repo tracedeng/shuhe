@@ -88,3 +88,7 @@ def lifegear_sub(request, sub):
         items.append(item)
 
     return render_to_response('equipment_sub_list.html', {"equipment": equipment, "spec_th": fields, "spec": items})
+
+
+def index(request):
+    return render_to_response('index.html')
