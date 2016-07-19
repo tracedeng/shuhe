@@ -59,5 +59,14 @@ def lifegear(request):
 
 
 def lifegear_sub(request, sub):
+    ec = EquipmentCategories.objects.get(redirect=sub)  # 获取对应的大类
+    equipment = ec.equipment_set.all()          # 获取大类所有型号
 
-    return render_to_response('equipment_sub_list.html')
+    rule = {"bd": "ventilationspec_set", "ls": "ventilationspec_set", "hbd": "ventilationspec_set",
+            "bd120": "ventilationspec_set", "bd125": "ventilationspec_set", "ss": "ventilationspec_set",
+            "wrv": "heatspec_set", "hrv": "heatspec_set", "glx": "airspec_set", "ev21": "soundoffspec_set",
+            "ev28": "strongspec_set", "ecv": "circularspec_set", "hev": "hiddenspec_set"}
+
+    # rule[sub]
+
+    return render_to_response('equipment_sub_list.html', {"model", equipment.values("identification", "description")})

@@ -60,6 +60,20 @@ class Drinking(Appliances):
         verbose_name_plural = "GE直饮机"
 
 
+class EquipmentCategories(models.Model):
+    categories = models.CharField(max_length=32, verbose_name="大类")
+    image = models.CharField(max_length=64, verbose_name="图片名称")
+    redirect = models.CharField(max_length=64, verbose_name="重定向目标")
+    group = models.CharField(max_length=64, verbose_name="组",
+                             choices=(('ventilation', '浴室暖房换气设备'), ('aeration', '新风通风设备')))
+
+    class Meta:
+        verbose_name_plural = "乐奇电器大类"
+
+    def __unicode__(self):
+        return self.categories
+
+
 class Equipment(models.Model):
     identification = models.CharField(max_length=32, verbose_name="型号")
     description = models.CharField(max_length=64, verbose_name="型号描述")
@@ -73,20 +87,6 @@ class Equipment(models.Model):
     def __unicode__(self):
         return self.identification
         # return u"%s %s" % (self.name, self.identification)
-
-
-class EquipmentCategories(models.Model):
-    categories = models.CharField(max_length=32, verbose_name="大类")
-    image = models.CharField(max_length=64, verbose_name="图片名称")
-    redirect = models.CharField(max_length=64, verbose_name="重定向目标")
-    group = models.CharField(max_length=64, verbose_name="组",
-                             choices=(('ventilation', '浴室暖房换气设备'), ('aeration', '新风通风设备')))
-
-    class Meta:
-        verbose_name_plural = "乐奇电器大类"
-
-    # def __unicode__(self):
-    #     return self.identification
 
 
 class VentilationSpec(models.Model):
