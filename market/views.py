@@ -4,6 +4,7 @@ from django.shortcuts import render, render_to_response
 # Create your views here.
 from models import Softener, Purifier, Drinking
 from models import EquipmentCategories
+from models import VentilationSpec, HeatSpec, AirSpec, SoundOffSpec, StrongSpec, CircularSpec, HiddenSpec
 
 
 def appliances(request):
@@ -60,13 +61,26 @@ def lifegear(request):
 
 def lifegear_sub(request, sub):
     ec = EquipmentCategories.objects.get(redirect=sub)  # 获取对应的大类
-    equipment = ec.equipment_set.all()          # 获取大类所有型号
+    eq_set = ec.equipment_set.all()          # 获取大类所有型号
+    equipment = eq_set.values("identification", "description")
 
-    rule = {"bd": "ventilationspec_set", "ls": "ventilationspec_set", "hbd": "ventilationspec_set",
-            "bd120": "ventilationspec_set", "bd125": "ventilationspec_set", "ss": "ventilationspec_set",
-            "wrv": "heatspec_set", "hrv": "heatspec_set", "glx": "airspec_set", "ev21": "soundoffspec_set",
-            "ev28": "strongspec_set", "ecv": "circularspec_set", "hev": "hiddenspec_set"}
+    match = {"bd": "VentilationSpec", "ls": "VentilationSpec", "hbd": "VentilationSpec", "bd120": "VentilationSpec",
+             "bd125": "VentilationSpec", "ss": "VentilationSpec", "wrv": "HeatSpec", "hrv": "HeatSpec",
+             "glx": "AirSpec", "ev21": "SoundOffSpec", "ev28": "StrongSpec", "ecv": "CircularSpec", "hev": "HiddenSpec"}
+    # match = {"bd": "ventilationspec_set", "ls": "ventilationspec_set", "hbd": "ventilationspec_set",
+    #          "bd120": "ventilationspec_set", "bd125": "ventilationspec_set", "ss": "ventilationspec_set",
+    #          "wrv": "heatspec_set", "hrv": "heatspec_set", "glx": "airspec_set", "ev21": "soundoffspec_set",
+    #          "ev28": "strongspec_set", "ecv": "circularspec_set", "hev": "hiddenspec_set"}
+    fields = eval(match[sub])._meta.get_fields()
+    values = getattr(ec.equipment_set.all()[0], match[sub].lower() + "_set").values()
+    hidden_field = ('id',)
+    items = []
+    for value in values:
+        item = []
+        for field in fields:
+            if field.name in hidden_field:
+                continue
+            item.append(value[field.name])
+        items.append(item)
 
-    # rule[sub]
-
-    return render_to_response('equipment_sub_list.html', {"model", equipment.values("identification", "description")})
+    return render_to_response('equipment_sub_list.html', {"equipment": equipment, "spec_th": fields, "spec": items})

@@ -38,32 +38,33 @@
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane fade in active" id="purifier">
                         <table class="table table-striped table-bordered table-hover table-responsive">
-                            {% for tr in model %}
+                            {% for tr in equipment %}
                                 <tr>
-                                {% for td in tr.keys %}
-                                    <td>{{ tr[td] }}</td>
+                                {% for td in tr.values %}
+                                    <td>{{ td }}</td>
                                 {% endfor %}
                                 </tr>
                             {% endfor %}
-                            <tr>
-                                <td>WRV-150</td>
-                                <td>壁挂式</td>
-                            </tr>
                         </table>
                     </div>
                     <div role="tabpanel" class="tab-pane fade" id="softener">
                         <table class="table table-striped table-bordered table-hover table-responsive">
-                            <!--{% for tr in softener %}-->
-                                <!--<tr>-->
-                                <!--{% for td in tr %}-->
-                                    <!--<td>{{ td }}</td>-->
-                                <!--{% endfor %}-->
-                                <!--</tr>-->
-                            <!--{% endfor %}-->
                             <tr>
-                                <td>风量</td>
-                                <td>消耗电量</td>
+                                {% for td in spec_th %}
+                                    <td>{{ td.verbose_name }}</td>
+                                {% endfor %}
                             </tr>
+                            {% for tr in spec %}
+                                <tr>
+                                {% for td in tr %}
+                                    <td>{{ td }}</td>
+                                {% endfor %}
+                                </tr>
+                            {% endfor %}
+                            <!--<tr>-->
+                                <!--<td>风量</td>-->
+                                <!--<td>消耗电量</td>-->
+                            <!--</tr>-->
                         </table>
                     </div>
                     <!--<div role="tabpanel" class="tab-pane fade" id="drinking">-->
