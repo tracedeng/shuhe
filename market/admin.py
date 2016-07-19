@@ -26,7 +26,7 @@ class EquipmentAdmin(admin.ModelAdmin):
 
 
 class EquipmentCategoriesAdmin(admin.ModelAdmin):
-    list_display = ('categories', 'img_name', 'group')
+    list_display = ('categories', 'image', 'group', 'redirect')
 
 
 class VentilationSpecAdmin(admin.ModelAdmin):

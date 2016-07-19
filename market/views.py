@@ -56,3 +56,8 @@ def lifegear(request):
     aeration = EquipmentCategories.objects.filter(group="aeration").values()
 
     return render_to_response('equipment_list.html', {"ventilation": ventilation, "aeration": aeration})
+
+
+def lifegear_sub(request, sub):
+
+    return render_to_response('equipment_sub_list.html')

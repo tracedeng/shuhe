@@ -65,6 +65,8 @@ class Equipment(models.Model):
     description = models.CharField(max_length=64, verbose_name="型号描述")
     name = models.CharField(max_length=64, verbose_name="名称")
 
+    categories = models.ForeignKey(EquipmentCategories, verbose_name="大类")
+
     class Meta:
         verbose_name_plural = "乐奇电器型号"
 
@@ -76,7 +78,7 @@ class Equipment(models.Model):
 class EquipmentCategories(models.Model):
     categories = models.CharField(max_length=32, verbose_name="大类")
     image = models.CharField(max_length=64, verbose_name="图片名称")
-    redirect = models.CharField(verbose_name="重定向目标")
+    redirect = models.CharField(max_length=64, verbose_name="重定向目标")
     group = models.CharField(max_length=64, verbose_name="组",
                              choices=(('ventilation', '浴室暖房换气设备'), ('aeration', '新风通风设备')))
 
