@@ -75,7 +75,8 @@ class Equipment(models.Model):
 
 class EquipmentCategories(models.Model):
     categories = models.CharField(max_length=32, verbose_name="大类")
-    img_name = models.CharField(max_length=64, verbose_name="图片名称")
+    image = models.CharField(max_length=64, verbose_name="图片名称")
+    redirect = models.CharField(verbose_name="重定向目标")
     group = models.CharField(max_length=64, verbose_name="组",
                              choices=(('ventilation', '浴室暖房换气设备'), ('aeration', '新风通风设备')))
 

@@ -1,5 +1,7 @@
 {% extends "bootstrap.html" %}
 
+{% load staticfiles %}
+
 {% block title %}乐奇产品{% endblock %}
 
 {% block headstyle %}
@@ -33,7 +35,9 @@
             {% for item in ventilation %}
             <div class="col-md-6 col-xs-6">
                 <div class="thumbnail">
-                    <img src="{% static 'img/'{{item.img_path}} %}" alt="">
+                    <a href="{{ item.redirect }}">
+                        <img src="{% static '' %}img/{{ item.image }}" alt="">
+                    </a>
                     <div class="caption">
                         <h6>{{ item.categories }}</h6>
                         <!--<p>...</p>-->
@@ -51,7 +55,9 @@
             {% for item in aeration %}
             <div class="col-md-6 col-xs-6">
                 <div class="thumbnail">
-                    <img src="{% static 'img/'{{item.img_path}} %}" alt="">
+                    <a href="{{ item.redirect }}">
+                        <img src="{% static '' %}img/{{ item.image }}" alt="">
+                    </a>
                     <div class="caption">
                         <h6>{{ item.categories }}</h6>
                         <!--<p>...</p>-->
