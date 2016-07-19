@@ -71,15 +71,19 @@ def lifegear_sub(request, sub):
     #          "bd120": "ventilationspec_set", "bd125": "ventilationspec_set", "ss": "ventilationspec_set",
     #          "wrv": "heatspec_set", "hrv": "heatspec_set", "glx": "airspec_set", "ev21": "soundoffspec_set",
     #          "ev28": "strongspec_set", "ecv": "circularspec_set", "hev": "hiddenspec_set"}
-    fields = eval(match[sub])._meta.get_fields()
+    hidden_field = ('id', 'equipment')
+    cls_fields = eval(match[sub])._meta.get_fields()
+    fields = []
+    for field in cls_fields:
+        if field.name in hidden_field:
+            continue
+        fields.append(field)
+
     values = getattr(ec.equipment_set.all()[0], match[sub].lower() + "_set").values()
-    hidden_field = ('id',)
     items = []
     for value in values:
         item = []
         for field in fields:
-            if field.name in hidden_field:
-                continue
             item.append(value[field.name])
         items.append(item)
 
