@@ -84,7 +84,7 @@
                     </div>
                 </div>
             </div>
-            <button type="button" class="btn btn-default">modal</button>
+            <button type="button" class="btn btn-default" data-toggle="modal" data-target=".modal">modal</button>
         </div>
     </div>
     <div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
@@ -98,19 +98,28 @@
                     <h3 class="modal-title">选择型号</h3>
                 </div>
                 <div class="modal-body">
-                    <ul class="list-group">
-                        {% for tr in equipment %}
-                            <li class="list-group-item">
-                                <div class="checkbox">
-                                    <label><input type="checkbox">{{ tr.0 }}</label>
-                                </div>
-                            </li>
-                            <!--{% for td in tr %}-->
-                                <!--<td>{{ td }}</td>-->
-                            <!--{% endfor %}-->
-                            <!--</tr>-->
+                    <div class="row">
+                        <div class="page-header">
+                            <h1>GE水系列<small>GE水系列</small></h1>
+                        </div>
+                        {% for tr in appliance %}
+                        <div class="col-xs-4">
+                            <div class="checkbox">
+                                <label><input type="checkbox">{{ tr.0 }}</label>
+                            </div>
+                        </div>
                         {% endfor %}
-                    </ul>
+                        <div class="page-header">
+                            <h1>乐奇电器<small>乐奇电器</small></h1>
+                        </div>
+                        {% for tr in equipment %}
+                        <div class="col-xs-4">
+                            <div class="checkbox">
+                                <label><input type="checkbox">{{ tr.0 }}</label>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <div class="btn-group">

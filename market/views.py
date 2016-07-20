@@ -91,12 +91,21 @@ def lifegear_sub(request, sub):
 
 
 def maintenance(request):
+    # GE
+    for iter_class in (Softener, Purifier, Drinking):
+        values = iter_class.objects.values("identification", "description")  # 所有model 行
+        appliance = []
+        for value in values:
+            item = (value["identification"], value["description"])
+        appliance.append(item)
+
+    # 乐奇
     values = Equipment.objects.values("identification", "name")
-    items = []
+    equipment = []
     for value in values:
         item = (value["identification"], value["name"])
-        items.append(item)
-    return render_to_response('maintenance.html', {"equipment": items})
+        equipment.append(item)
+    return render_to_response('maintenance.html', {"appliance": appliance, "equipment": equipment})
 
 
 def index(request):
