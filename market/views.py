@@ -92,12 +92,12 @@ def lifegear_sub(request, sub):
 
 def maintenance(request):
     # GE
+    appliance = []
     for iter_class in (Softener, Purifier, Drinking):
         values = iter_class.objects.values("identification", "description")  # 所有model 行
-        appliance = []
         for value in values:
             item = (value["identification"], value["description"])
-        appliance.append(item)
+            appliance.append(item)
 
     # 乐奇
     values = Equipment.objects.values("identification", "name")
