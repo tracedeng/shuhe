@@ -3,7 +3,7 @@ from django.shortcuts import render, render_to_response
 
 # Create your views here.
 from models import Softener, Purifier, Drinking
-from models import EquipmentCategories
+from models import EquipmentCategories, Equipment
 from models import VentilationSpec, HeatSpec, AirSpec, SoundOffSpec, StrongSpec, CircularSpec, HiddenSpec
 
 
@@ -91,7 +91,12 @@ def lifegear_sub(request, sub):
 
 
 def maintenance(request):
-    return render_to_response('maintenance.html')
+    values = Equipment.objects.values("identification", "name")
+    items = []
+    for value in values:
+        item = (value["identification"], value["name"])
+        items.append(item)
+    return render_to_response('maintenance.html', {"equipment": items})
 
 
 def index(request):
