@@ -105,6 +105,11 @@ def maintenance(request):
     for value in values:
         item = (value["identification"], value["name"])
         equipment.append(item)
+
+    if request.method == 'POST':
+        if request.POST.get('numbers', ''):
+            numbers = request.POST['numbers']
+            return render_to_response('maintenance.html', {"appliance": appliance, "equipment": equipment, "numbers": numbers})
     return render_to_response('maintenance.html', {"appliance": appliance, "equipment": equipment})
 
 
