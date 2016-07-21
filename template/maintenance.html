@@ -118,7 +118,7 @@
                             <!--</ul>-->
                             <!--{% endif %}-->
 
-                            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target=".modal" aria-label="Left Align">
+                            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target=".modal-choose" aria-label="Left Align">
                                 <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>选择产品型号
                             </button>
                         </form>
@@ -180,6 +180,33 @@
             </div>
         </div>
     </div>
+    <div class="modal fade modal-feedback" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <!--<button type="button" class="close" data-dismiss="modal">-->
+                    <!--<span aria-hidden="true">&times;</span>-->
+                    <!--<span class="sr-only">Close</span>-->
+                <!--</button>-->
+                <h3 class="modal-title">维保提交</h3>
+            </div>
+            <div class="modal-body modal-body-feedback">
+                <!--<p>你的维保申请已提交成功，工作人员正在处理。</p>-->
+            </div>
+            <div class="modal-footer">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-warning btn-sm btn-cancel-feedback">确认
+                        <!--<i class="glyphicon glyphicon-ok"></i>-->
+                    </button>
+                    <!--<button type="button" class="btn btn-warning btn-sm btn-cancel">取消-->
+                        <!--<i class="glyphicon glyphicon-remove"></i>-->
+                    <!--</button>-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 {% endblock %}
 
@@ -256,11 +283,10 @@
                     async:true,
                     success:function(data){
                         if(data.length > 0){
-                            $(".modal-choose").after(data);
-                            $(".modal-choose").modal("hide");
+                            $(".modal-body-feedback").html(data)
+                            $(".modal-choose").modal("show");
                             $(".btn-apply-cancel").click(function(e){
                                 $(".modal-choose").modal("hide");
-                                $(".modal-choose").remove();
                             });
                         }
                     },

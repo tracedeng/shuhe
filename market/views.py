@@ -125,9 +125,10 @@ class MaintenanceForm(forms.Form):
     fix_date = forms.DateField()
 
 
+@csrf_exempt
 def maintenance_apply(request):
     print request.POST
-    return render_to_response('maintenance_apply.html')
+    return render_to_response('maintenance_apply.html', {"yes": True})
 
 
 def index(request):
