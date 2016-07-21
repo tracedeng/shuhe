@@ -91,6 +91,11 @@ def lifegear_sub(request, sub):
 
 
 def maintenance(request):
+    if request.method == 'POST':
+        if request.POST.getlist('numbers[]', []):
+            numbers = request.POST.getlist('numbers[]')
+            return render_to_response('maintenance_choose.html', {"numbers": numbers})
+
     # GE
     appliance = []
     for iter_class in (Softener, Purifier, Drinking):
@@ -106,10 +111,6 @@ def maintenance(request):
         item = (value["identification"], value["name"])
         equipment.append(item)
 
-    if request.method == 'POST':
-        if request.POST.get('numbers', ''):
-            numbers = request.POST['numbers']
-            return render_to_response('maintenance.html', {"appliance": appliance, "equipment": equipment, "numbers": numbers})
     return render_to_response('maintenance.html', {"appliance": appliance, "equipment": equipment})
 
 

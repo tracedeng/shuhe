@@ -1,0 +1,24 @@
+{% if numbers %}
+    <ul class="list-group">
+        {% for number in numbers %}
+        <li class="list-group-item">
+            <div class="row">
+                <div class="col-xs-5">
+                    <h6>number:{{ number }}</h6>
+                </div>
+                <div class="col-xs-7">
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                        <button class="btn btn-default" type="button">-</button>
+                        </span>
+                        <input type="text" class="form-control" placeholder="1" value="1">
+                        <span class="input-group-btn">
+                        <button class="btn btn-default" type="button">+</button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+{% endif %}

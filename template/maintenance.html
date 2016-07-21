@@ -78,37 +78,37 @@
                                 </div>
                             </div>
 
-                            <div class="form-group has-warning form-group-owner">
+                            <div class="form-group has-warning form-group-owner fixed-date">
                                 <div class="input-append date" id="filter-date-from" data-date-format="yyyy-mm-dd">
                                     <input type="text" class="form-control input-sm" placeholder="安装时间" readonly>
                                     <span class="add-on"><i class="icon-remove"></i></span>
                                     <span class="add-on"><i class="icon-calendar"></i></span>
                                 </div>
                             </div>
-                            {% if numbers %}
-                            <ul class="list-group">
-                                {% for number in numbers %}
-                                <li class="list-group-item">
-                                    <div class="row">
-                                        <div class="col-xs-5">
-                                            <h6>number:{{ number }}</h6>
-                                        </div>
-                                        <div class="col-xs-7">
-                                            <div class="input-group">
-                                                <span class="input-group-btn">
-                                                <button class="btn btn-default" type="button">-</button>
-                                                </span>
-                                                <input type="text" class="form-control" placeholder="1" value="1">
-                                                <span class="input-group-btn">
-                                                <button class="btn btn-default" type="button">+</button>
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                {% endfor %}
-                            </ul>
-                            {% endif %}
+                            <!--{% if numbers %}-->
+                            <!--<ul class="list-group">-->
+                                <!--{% for number in numbers %}-->
+                                <!--<li class="list-group-item">-->
+                                    <!--<div class="row">-->
+                                        <!--<div class="col-xs-5">-->
+                                            <!--<h6>number:{{ number }}</h6>-->
+                                        <!--</div>-->
+                                        <!--<div class="col-xs-7">-->
+                                            <!--<div class="input-group">-->
+                                                <!--<span class="input-group-btn">-->
+                                                <!--<button class="btn btn-default" type="button">-</button>-->
+                                                <!--</span>-->
+                                                <!--<input type="text" class="form-control" placeholder="1" value="1">-->
+                                                <!--<span class="input-group-btn">-->
+                                                <!--<button class="btn btn-default" type="button">+</button>-->
+                                                <!--</span>-->
+                                            <!--</div>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+                                <!--</li>-->
+                                <!--{% endfor %}-->
+                            <!--</ul>-->
+                            <!--{% endif %}-->
 
                             <button type="button" class="btn btn-default btn-success" data-toggle="modal" data-target=".modal" aria-label="Left Align">
                                 <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>选择产品型号
@@ -177,21 +177,21 @@
         $(function(){
             $("#filter-date-from").datetimepicker({language:"zh-CN", pickerPosition:"bottom-right", autoclose:true, keyboardNavigation:true});
 
-            $(".btn-cancel").parent().click(function(e){
+            $(".btn-cancel").click(function(e){
                 $(".modal").modal("hide");
             });
 
-            $(".btn-confirm").parent().click(function(e){
+            $(".btn-confirm").click(function(e){
                 var numbers = Array();
                 //所有选中的型号
                 $.each($(":checkbox:checked"), function(i, item){
                     number = $(this).parent().text();
                     numbers.push(number);
                 });
-
+                $(".modal").modal("hide");
                 $.ajax({
                     type:"post",
-                    url:"",
+                    url:"m",
                     data:{"numbers":numbers},
                     dataType:"json",
                     async:false,
@@ -199,6 +199,7 @@
                         if(data.errcode)
                         {
                         }else{
+                            $(".fixed-date").after(data);
                         },
                     });
                 })
