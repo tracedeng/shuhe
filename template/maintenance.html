@@ -106,6 +106,7 @@
                                         </div>
                                     </div>
                                 </li>
+                                {% endfor %}
                             </ul>
                             {% endif %}
 
@@ -170,36 +171,39 @@
     </div>
 
 {% endblock %}
+
 {% block bodyscript %}
     <script type="text/javascript">
         $(function(){
             $("#filter-date-from").datetimepicker({language:"zh-CN", pickerPosition:"bottom-right", autoclose:true, keyboardNavigation:true});
+
+            $(".btn-cancel").parent().click(function(e){
+                $(".modal").modal("hide");
+            });
+
+            $(".btn-confirm").parent().click(function(e){
+                var numbers = Array();
+                //所有选中的型号
+                $.each($(":checkbox:checked"), function(i, item){
+                    number = $(this).parent().text();
+                    numbers.push(number);
+                });
+
+                $.ajax({
+                    type:"post",
+                    url:"",
+                    data:{"numbers":numbers},
+                    dataType:"json",
+                    async:false,
+                    success:function(data){
+                        if(data.errcode)
+                        {
+                        }else{
+                        },
+                    });
+                })
+            })
         })
 
-        $(".btn-cancel").parent().click(function(e){
-            $(".resource-modal").modal("hide");
-        });
-
-        $(".btn-confirm").parent().click(function(e){
-            var numbers = Array();
-            //所有选中的型号
-            $.each($(":checkbox:checked"), function(i, item){
-                number = $(this).parent().text();
-                numbers.push(number);
-            });
-            
-            $.ajax({
-                type:"post",
-                url:"",
-                data:{"numbers":numbers},
-                dataType:"json",
-                async:false,
-                success:function(data){
-                if(data.errcode)
-                {
-                }else{
-                },
-            });
-        })
     </script>
 {% endblock %}
