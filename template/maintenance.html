@@ -234,16 +234,16 @@
             // 提交维保
             $(".btn-submit").click(function(e){
                 // 姓名
-                var name = $(".input-owner input").value();
-                var phone = $(".input-phone input").value()
+                var name = $(".input-owner input")[0].value;
+                var phone = $(".input-phone input")[0].value;
                 var address = "临川";
                 var fix_date = "2016-07-20";
-                var devices = Array()
-                $.each($(".checked-device"), function(i, item){
-                    var device = $(this).children("device").text()
-                    var num = $(this).children("device-num").value()
-                    devices.push(Array("device": device, "num": num);
-                })
+                var devices = Array();
+                $.each($(".checked-device .list-group-item"), function(i, item){
+                    var device = $(this).children(".device").text();
+                    var num = $(this).children(".num").value;
+                    devices.push(Array(device, num));
+                });
 
                 $.ajax({
                     type:"post",

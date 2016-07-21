@@ -216,7 +216,7 @@ class Agent(models.Model):
 class MaintenanceAuxiliary(models.Model):
     uuid = models.UUIDField(max_length=32)
     equipment = models.ForeignKey(Equipment, verbose_name='型号')
-    number = models.BigIntegerField(verbose='数量')
+    number = models.BigIntegerField(verbose_name='数量')
 
     def __unicode__(self):
         return u"%s %s" % (self.equipment, self.number)
