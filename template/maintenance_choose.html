@@ -1,19 +1,19 @@
 {% if numbers %}
-    <ul class="list-group">
+    <ul class="list-group checked-device">
         {% for number in numbers %}
         <li class="list-group-item">
             <div class="row">
-                <div class="col-xs-5">
-                    <h6>{{ number }}</h6>
+                <div class="col-xs-6">
+                    <h6 class="device">{{ number }}</h6>
                 </div>
-                <div class="col-xs-5">
+                <div class="col-xs-6">
                     <div class="input-group">
                         <span class="input-group-btn">
-                        <button class="btn btn-default" type="button">-</button>
+                        <button class="btn btn-default btn-minus" type="button">-</button>
                         </span>
-                        <input type="text" class="form-control" placeholder="1" value="1">
+                        <input type="text" class="form-control device-num" placeholder="1" value="1">
                         <span class="input-group-btn">
-                        <button class="btn btn-default" type="button">+</button>
+                        <button class="btn btn-default btn-plus" type="button">+</button>
                         </span>
                     </div>
                 </div>

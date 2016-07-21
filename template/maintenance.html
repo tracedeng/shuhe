@@ -8,7 +8,7 @@
 }
 
 .btn-submit {
-    align: right;
+    float: right;
 }
 {% endblock %}
 
@@ -41,8 +41,8 @@
                             </div>
 
                             <div class="form-group has-warning form-group-owner">
-                                <label class="sr-only" for=".input-owner">手机号</label>
-                                <div class="input-group input-owner">
+                                <label class="sr-only" for=".input-phone">手机号</label>
+                                <div class="input-group input-phone">
                                     <span class="input-group-addon"><li class="glyphicon glyphicon-phone"></li></span>
                                     <input type="text" class="form-control" placeholder="手机号">
                                     <span class="input-group-addon">*</span>
@@ -54,7 +54,7 @@
                                 <div class="row">
                                     <div class="col-xs-4">
                                     <!--<input type="text" class="form-control" placeholder=".col-xs-2">-->
-                                        <label class="sr-only" for=".input-owner">省</label>
+                                        <label class="sr-only" for=".input-province">省</label>
                                         <select class="form-control">
                                             <option>1</option>
                                             <option>2</option>
@@ -64,7 +64,7 @@
                                         </select>
                                     </div>
                                     <div class="col-xs-4">
-                                        <label class="sr-only" for=".input-owner">市</label>
+                                        <label class="sr-only" for=".input-city">市</label>
                                         <select class="form-control">
                                             <option>1</option>
                                             <option>2</option>
@@ -74,7 +74,7 @@
                                         </select>
                                     </div>
                                     <div class="col-xs-4">
-                                        <label class="sr-only" for=".input-owner">区/县</label>
+                                        <label class="sr-only" for=".input-zone">区/县</label>
                                         <select class="form-control">
                                             <option>1</option>
                                             <option>2</option>
@@ -118,10 +118,11 @@
                             <!--</ul>-->
                             <!--{% endif %}-->
 
-                            <button type="button" class="btn btn-success" data-toggle="modal" data-target=".modal" aria-label="Left Align">
+                            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target=".modal" aria-label="Left Align">
                                 <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>选择产品型号
                             </button>
-                            <hr />
+                            <br />
+                            <br />
                             <button type="submit" class="btn btn-success btn-submit">
                                 提交维保
                             </button>
@@ -215,8 +216,44 @@
                 });
             });
 
-            $(".btn-submit").click(function(e){
+            // 型号数量－1
+            $(".btn-minus").click(function(e){
+                var num = $(this).parent().next();
+                if(num.value - 0 > 0)
+                {
+                    num.value -= 1;
+                }
+            });
 
+            // 型号数量＋1
+            $(".btn-plus").click(function(e){
+                var num = $(this).parent().prev();
+                num.value = num.value - 0 + 1;
+            });
+
+            // 提交维保
+            $(".btn-submit").click(function(e){
+                // 姓名
+                var name = $(".input-owner input").value();
+                var phone = $(".input-phone input").value()
+                var address = "临川";
+                var fix_date = "2016-07-20";
+                var devices = Array()
+                $.each($(".checked-device"), function(i, item){
+                    var device = $(this).children("device").text()
+                    var num = $(this).children("device-num").value()
+                    devices.push(Array("device": device, "num": num);
+                })
+
+                $.ajax({
+                    type:"post",
+                    url:"m",
+                    data:{"name": name, "phone": phone, "address": address, "date": fix_date, "devices": devices},
+                    dataType:"html",
+                    async:true,
+                    success:function(data){
+                    },
+                });
             });
         })
     </script>

@@ -213,12 +213,26 @@ class Agent(models.Model):
         verbose_name_plural = "合作伙伴"
 
 
+class MaintenanceAuxiliary(models.Model):
+    uuid = models.UUIDField(max_length=32)
+    equipment = models.ForeignKey(Equipment, verbose_name='型号')
+    number = models.BigIntegerField(verbose='数量')
+
+    def __unicode__(self):
+        return u"%s %s" % (self.equipment, self.number)
+
+    class Meta:
+        verbose_name_plural = "维保设备及数量"
+
+
 class Maintenance(models.Model):
     name = models.CharField(max_length=128)
     phone = models.CharField(max_length=32)
     fix_address = models.CharField(max_length=32)
     fix_date = models.DateField()
     apply_time = models.TimeField()
+    uuid = models.UUIDField(max_length=32)
+    device_number = models.ManyToManyField(MaintenanceAuxiliary, verbose_name="设备及数量")
     handled = models.CharField(max_length=8)
 
     def __unicode__(self):
