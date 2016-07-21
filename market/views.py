@@ -5,6 +5,7 @@ from django.shortcuts import render, render_to_response
 from models import Softener, Purifier, Drinking
 from models import EquipmentCategories, Equipment
 from models import VentilationSpec, HeatSpec, AirSpec, SoundOffSpec, StrongSpec, CircularSpec, HiddenSpec
+from django.views.decorators.csrf import csrf_exempt
 
 
 def appliances(request):
@@ -90,7 +91,9 @@ def lifegear_sub(request, sub):
     return render_to_response('equipment_sub_list.html', {"equipment": equipment, "spec_th": fields, "spec": items})
 
 
+@csrf_exempt
 def maintenance(request):
+    # 选择产品型号后ajax局部刷新
     if request.method == 'POST':
         if request.POST.getlist('numbers[]', []):
             numbers = request.POST.getlist('numbers[]')

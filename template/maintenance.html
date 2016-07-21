@@ -193,17 +193,17 @@
                     type:"post",
                     url:"m",
                     data:{"numbers":numbers},
-                    dataType:"json",
-                    async:false,
+                    dataType:"html",
+                    async:true,
                     success:function(data){
-                        if(data.errcode)
+                        if(data.length > 0)
                         {
-                        }else{
+                            $(".list-group").remove();
                             $(".fixed-date").after(data);
-                        },
-                    });
-                })
-            })
+                        }
+                    },
+                });
+            });
         })
 
     </script>
