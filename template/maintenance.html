@@ -6,11 +6,19 @@
 .panel {
     margin-top: 10px;
 }
+
+.btn-submit {
+    align: right;
+}
 {% endblock %}
 
 {% block extscript %}
 <script type="text/javascript" src="{% static 'js/bootstrap-datetimepicker.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/bootstrap-datetimepicker.zh-CN.js' %}"></script>
+{% endblock %}
+
+{% block extcss %}
+<link rel="stylesheet" href="{% static 'css/bootstrap-datetimepicker.min.css' %}" >
 {% endblock %}
 
 {% block title %}官方维保{% endblock %}
@@ -110,11 +118,13 @@
                             <!--</ul>-->
                             <!--{% endif %}-->
 
-                            <button type="button" class="btn btn-default btn-success" data-toggle="modal" data-target=".modal" aria-label="Left Align">
+                            <button type="button" class="btn btn-success" data-toggle="modal" data-target=".modal" aria-label="Left Align">
                                 <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>选择产品型号
                             </button>
                             <hr />
-                            <button type="submit" class="btn btn-default">Submit</button>
+                            <button type="submit" class="btn btn-success btn-submit">
+                                提交维保
+                            </button>
                         </form>
                     </div>
                 </div>
@@ -175,7 +185,7 @@
 {% block bodyscript %}
     <script type="text/javascript">
         $(function(){
-            $("#filter-date-from").datetimepicker({language:"zh-CN", pickerPosition:"bottom-right", autoclose:true, keyboardNavigation:true});
+            $("#filter-date-from").datetimepicker({language:"zh-CN", pickerPosition:"bottom-right", autoclose:true, keyboardNavigation:true, minView:2});
 
             $(".btn-cancel").click(function(e){
                 $(".modal").modal("hide");
@@ -204,7 +214,10 @@
                     },
                 });
             });
-        })
 
+            $(".btn-submit").click(function(e){
+
+            });
+        })
     </script>
 {% endblock %}

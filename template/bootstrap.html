@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}" >
     {% block extscript %}{% endblock %}
     <style>{% block headstyle %}{% endblock %}</style>
+    {% block extcss %}{% endblock %}
 </head>
 <body>
     {% block body %}这是bootstrap基础模版，如果你需要使用bootstrap功能，继承[extends "bootstrap.html"]后使用。{% endblock %}
