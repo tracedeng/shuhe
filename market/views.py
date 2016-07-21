@@ -6,6 +6,7 @@ from models import Softener, Purifier, Drinking
 from models import EquipmentCategories, Equipment
 from models import VentilationSpec, HeatSpec, AirSpec, SoundOffSpec, StrongSpec, CircularSpec, HiddenSpec
 from django.views.decorators.csrf import csrf_exempt
+from django import forms
 
 
 def appliances(request):
@@ -115,6 +116,18 @@ def maintenance(request):
         equipment.append(item)
 
     return render_to_response('maintenance.html', {"appliance": appliance, "equipment": equipment})
+
+
+class MaintenanceForm(forms.Form):
+    name = forms.CharField(max_length=100)
+    phone = forms.EmailField(required=False)
+    fix_address = forms.CharField()
+    fix_date = forms.DateField()
+
+
+def maintenance_apply(request):
+    print request.POST
+    return render_to_response('maintenance_apply.html')
 
 
 def index(request):
