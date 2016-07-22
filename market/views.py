@@ -5,8 +5,11 @@ from django.shortcuts import render, render_to_response
 from models import Softener, Purifier, Drinking
 from models import EquipmentCategories, Equipment
 from models import VentilationSpec, HeatSpec, AirSpec, SoundOffSpec, StrongSpec, CircularSpec, HiddenSpec
+from models import Maintenance, MaintenanceAuxiliary
 from django.views.decorators.csrf import csrf_exempt
 from django import forms
+import json, uuid
+from datetime import datetime
 
 
 def appliances(request):
@@ -119,15 +122,33 @@ def maintenance(request):
 
 
 class MaintenanceForm(forms.Form):
-    name = forms.CharField(max_length=100)
-    phone = forms.EmailField(required=False)
-    fix_address = forms.CharField()
+    name = forms.CharField(max_length=32)
+    phone = forms.EmailField(max_length=16)
+    fix_address = forms.CharField(max_length=64)
     fix_date = forms.DateField()
+    devices = forms.CharField(max_length=256)
+
 
 
 @csrf_exempt
 def maintenance_apply(request):
-    print request.POST
+    if request.method == 'POST':
+        form = MaintenanceForm(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            guid = uuid.uuid1()
+            now = datetime.now()
+
+            devices = json.loads(cd['devices'])
+            for device in devices:
+                ma = MaintenanceAuxiliary(uuid=guid, equipment=device[0], number=device[1])
+                ma.save()
+
+            m = Maintenance(name=cd['name'], phone=cd['phone'], fix_address=cd["fix_address"], fix_date=cd["fix_date"],
+                            apply_time=now, uuid=guid, handled="no")
+            m.save()
+    # device_number = models.ManyToManyField(MaintenanceAuxiliary, verbose_name="设备及数量")
+    # print json.loads(request.POST.get('devices'))
     return render_to_response('maintenance_apply.html', {"yes": True})
 
 

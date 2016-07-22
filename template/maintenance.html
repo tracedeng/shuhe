@@ -278,15 +278,15 @@
                 $.ajax({
                     type:"post",
                     url:"ma",
-                    data:{"name": name, "phone": phone, "address": address, "date": fix_date, "devices": devices},
+                    data:{"name": name, "phone": phone, "fix_address": address, "date": fix_date, "devices": JSON.stringify(devices)},
                     dataType:"html",
                     async:true,
                     success:function(data){
                         if(data.length > 0){
                             $(".modal-body-feedback").html(data)
-                            $(".modal-choose").modal("show");
-                            $(".btn-apply-cancel").click(function(e){
-                                $(".modal-choose").modal("hide");
+                            $(".modal-feedback").modal("show");
+                            $(".btn-cancel-feedback").click(function(e){
+                                $(".modal-feedback").modal("hide");
                             });
                         }
                     },
