@@ -278,7 +278,7 @@
                 $.ajax({
                     type:"post",
                     url:"ma",
-                    data:{"name": name, "phone": phone, "fix_address": address, "date": fix_date, "devices": JSON.stringify(devices)},
+                    data:{"name": name, "phone": phone, "fix_address": address, "fix_date": fix_date, "devices": JSON.stringify(devices)},
                     dataType:"html",
                     async:true,
                     success:function(data){

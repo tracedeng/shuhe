@@ -1,32 +1,9 @@
-<!--<div class="modal fade modal-feedback" tabindex="-1" role="dialog" aria-hidden="true">-->
-    <!--<div class="modal-dialog">-->
-        <!--<div class="modal-content">-->
-            <!--<div class="modal-header">-->
-                <!--&lt;!&ndash;<button type="button" class="close" data-dismiss="modal">&ndash;&gt;-->
-                    <!--&lt;!&ndash;<span aria-hidden="true">&times;</span>&ndash;&gt;-->
-                    <!--&lt;!&ndash;<span class="sr-only">Close</span>&ndash;&gt;-->
-                <!--&lt;!&ndash;</button>&ndash;&gt;-->
-                <!--<h3 class="modal-title">维保提交</h3>-->
-            <!--</div>-->
-            <!--<div class="modal-body">-->
-                <!--<p>你的维保申请已提交成功，工作人员正在处理。</p>-->
-            <!--</div>-->
-            <!--<div class="modal-footer">-->
-                <!--<div class="btn-group">-->
-                    <!--<button type="button" class="btn btn-warning btn-sm btn-cancel-feedback">确认-->
-                        <!--&lt;!&ndash;<i class="glyphicon glyphicon-ok"></i>&ndash;&gt;-->
-                    <!--</button>-->
-                    <!--&lt;!&ndash;<button type="button" class="btn btn-warning btn-sm btn-cancel">取消&ndash;&gt;-->
-                        <!--&lt;!&ndash;<i class="glyphicon glyphicon-remove"></i>&ndash;&gt;-->
-                    <!--&lt;!&ndash;</button>&ndash;&gt;-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
-    <!--</div>-->
-<!--</div>-->
-
-{% if yes %}
-    <p>你的维保申请已提交成功，工作人员正在处理。</p>
+{% if errors %}
+    {{ errors }}
 {% else %}
-    <p>你的维保申请失败，请稍候再试。</p>
+    {% if yes %}
+        <p>你的维保申请已提交成功，工作人员正在处理。</p>
+    {% else %}
+        <p>你的维保申请失败，请稍候再试。</p>
+    {% endif %}
 {% endif %}
