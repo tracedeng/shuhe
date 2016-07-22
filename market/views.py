@@ -186,30 +186,39 @@ def maintenance_apply(request):
 class AgentForm(forms.Form):
     name = forms.CharField(max_length=32, label="姓名")
     phone = forms.CharField(max_length=16)
+    openid = forms.CharField(max_length=64)
 
 
 def order(request):
-    # 获取openid
-    code = request.GET.get("code")
-    conn = httplib.HTTPSConnection("api.weixin.qq.com")
-    url = "/sns/oauth2/access_token?appid=wxe577b89ef194f974&secret=22c12dfc8ab1f4717238e8a909947748" \
-          "&code=%s&grant_type=authorization_code" % code
-    conn.request("GET", url)
-    res = conn.getresponse()
-    if res.status == 200:
-        result = json.load(res.read())
-        openid = result.get("openid", None)
-        if openid:
-            # 验证是否已经绑定的openid
-            try:
-                agent = Agent.objects.get(wechat=openid).value("name", "phone")
-                return render_to_response("order.html", {"name": agent.name, "phone": agent.phone})
-            except Exception as e:
-                return render_to_response('login.html', {'openid': openid})
-        else:
-            return render_to_response('login.html')
+    if request.method == 'GET':
+        # 从微信菜单跳转过来
+        # 获取openid
+        code = request.GET.get("code")
+        conn = httplib.HTTPSConnection("api.weixin.qq.com")
+        url = "/sns/oauth2/access_token?appid=wxe577b89ef194f974&secret=22c12dfc8ab1f4717238e8a909947748" \
+              "&code=%s&grant_type=authorization_code" % code
+        conn.request("GET", url)
+        res = conn.getresponse()
+        if res.status == 200:
+            result = json.loads(res.read())
+            openid = result.get("openid", None)
+            if openid:
+                # 验证是否已经绑定的openid
+                try:
+                    agent = Agent.objects.get(wechat=openid)
+                    return render_to_response("order.html", {"name": agent.name, "phone": agent.phone})
+                except Exception as e:
+                    return render_to_response('login.html', {'openid': openid})
+            else:
+                return render_to_response('login.html')
 
-    return render_to_response('login.html')
+        return render_to_response('login.html')
+    else:
+        # 登录，先保存Agent
+        f = AgentForm(request.POST)
+        agent = Agent(name=f['name'], phone=f['phone'], openid=f['openid'])
+        agent.save()
+        return render_to_response("order.html", {"name": f['name'], "phone": f['phone']})
 
 
 def index(request):
