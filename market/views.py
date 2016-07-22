@@ -122,7 +122,7 @@ def maintenance(request):
 
 
 class MaintenanceForm(forms.Form):
-    name = forms.CharField(max_length=32, verbose_name="姓名")
+    name = forms.CharField(max_length=32, label="姓名")
     phone = forms.CharField(max_length=16)
     fix_address = forms.CharField(max_length=64)
     fix_date = forms.DateField()
@@ -132,25 +132,27 @@ class MaintenanceForm(forms.Form):
 
 @csrf_exempt
 def maintenance_apply(request):
-    if request.method == 'POST':
-        mutable_post = request.POST.copy()
-        mutable_post["fix_date"] = datetime.strptime(mutable_post["fix_date"], "%Y-%m-%d").date()
-        f = MaintenanceForm(mutable_post)
-        if f.is_valid():
-            cd = f.cleaned_data
-            guid = uuid.uuid1()
-            now = datetime.now()
+    mutable_post = request.POST.copy() if request.method == 'POST' else request.GET.copy()
+    mutable_post["fix_date"] = datetime.strptime(mutable_post["fix_date"], "%Y-%m-%d").date()
+    f = MaintenanceForm(mutable_post)
+    if f.is_valid():
+        cd = f.cleaned_data
+        guid = uuid.uuid1()
+        now = datetime.now()
 
-            devices = json.loads(cd['devices'])
-            for device in devices:
-                ma = MaintenanceAuxiliary(uuid=guid, equipment=device[0], number=device[1])
-                ma.save()
+        devices = json.loads(cd['devices'])
+        for device in devices:
+            equipment = Equipment.objects.get(identification=device[0])
+            ma = MaintenanceAuxiliary(uuid=guid, equipment=equipment, number=device[1])
+            ma.save()
 
-            m = Maintenance(name=cd['name'], phone=cd['phone'], fix_address=cd["fix_address"], fix_date=cd["fix_date"],
-                            apply_time=now, uuid=guid, handled="no")
-            m.save()
-        else:
-            errors = f.errors
+        auxiliary = MaintenanceAuxiliary.objects.filter(uuid=guid)
+        m = Maintenance(name=cd['name'], phone=cd['phone'], fix_address=cd["fix_address"], fix_date=cd["fix_date"],
+                        apply_time=now, uuid=guid, auxiliary=auxiliary, handled="no")
+        m.save()
+        errors = None
+    else:
+        errors = f.errors
     # device_number = models.ManyToManyField(MaintenanceAuxiliary, verbose_name="设备及数量")
     # print json.loads(request.POST.get('devices'))
     return render_to_response('maintenance_apply.html', {"yes": True, "errors": errors})

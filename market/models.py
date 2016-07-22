@@ -232,7 +232,7 @@ class Maintenance(models.Model):
     fix_date = models.DateField()
     apply_time = models.TimeField()
     uuid = models.UUIDField(max_length=32)
-    device_number = models.ManyToManyField(MaintenanceAuxiliary, verbose_name="设备及数量")
+    auxiliary = models.ManyToManyField(MaintenanceAuxiliary, verbose_name="设备及数量")
     handled = models.CharField(max_length=8)
 
     def __unicode__(self):
