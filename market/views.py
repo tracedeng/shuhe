@@ -12,6 +12,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django import forms
 import json
 import uuid
+import httplib
 from datetime import datetime
 
 
@@ -189,26 +190,26 @@ class AgentForm(forms.Form):
 
 def order(request):
     # 获取openid
-    code = request.POST.get("code")
-    print "get code: %s" , code
     code = request.GET.get("code")
-    print "post code: %s" , code
     conn = httplib.HTTPSConnection("api.weixin.qq.com")
     url = "/sns/oauth2/access_token?appid=wxe577b89ef194f974&secret=22c12dfc8ab1f4717238e8a909947748" \
           "&code=%s&grant_type=authorization_code" % code
     conn.request("GET", url)
     res = conn.getresponse()
-    print res
-    print "after httplib"
-    openid = "test"
     if res.status == 200:
-        # 验证是否已经绑定的openid
-        # agent = Agent.objects.get(wechat=openid).value("name", "phone")
-        agent = None
-        if agent:
-            return render_to_response("order.html", {"name": agent.name, "phone": agent.phone})
+        result = json.load(res.read())
+        openid = result.get("openid", None)
+        if openid:
+            # 验证是否已经绑定的openid
+            try:
+                agent = Agent.objects.get(wechat=openid).value("name", "phone")
+                return render_to_response("order.html", {"name": agent.name, "phone": agent.phone})
+            except Exception as e:
+                return render_to_response('login.html', {'openid': openid})
+        else:
+            return render_to_response('login.html')
 
-    return render_to_response('login.html', {'openid': openid})
+    return render_to_response('login.html')
 
 
 def index(request):

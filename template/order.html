@@ -14,21 +14,19 @@
                                 <label class="sr-only" for=".input-owner">姓名</label>
                                 <div class="input-group input-owner">
                                     <span class="input-group-addon"><li class="glyphicon glyphicon-user"></li></span>
-                                    <input type="text" class="form-control" placeholder="姓名">
+                                    <input type="text" class="form-control" placeholder="姓名" value="{{ name }}">
                                     <span class="input-group-addon">*</span>
                                 </div>
                             </div>
                         </form>
-                        <!--<form role="form">-->
-                            <!--<div class="form-group has-warning form-group-owner">-->
-                                <!--<label class="sr-only" for=".input-owner">时间</label>-->
-                                <!--<div class="input-group input-owner">-->
-                                    <!--<span class="input-group-addon"><li class="glyphicon glyphicon-user"></li></span>-->
-                                    <!--<input type="text" class="form-control" placeholder="时间">-->
-                                    <!--<span class="input-group-addon">*</span>-->
-                                <!--</div>-->
-                            <!--</div>-->
-                        <!--</form>-->
+                        <div class="form-group has-warning form-group-owner">
+                            <label class="sr-only" for=".input-phone">手机号</label>
+                            <div class="input-group input-phone">
+                                <span class="input-group-addon"><li class="glyphicon glyphicon-phone"></li></span>
+                                <input type="text" class="form-control" placeholder="手机号" value="{{ phone }}">
+                                <span class="input-group-addon">*</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -204,7 +204,7 @@ class CircularSpec(models.Model):
 class Agent(models.Model):
     name = models.CharField(max_length=128, verbose_name="代理商")
     phone = models.CharField(max_length=32, verbose_name="代理商电话")
-    wechat = models.CharField(max_length=64, verbose_name="代理商微信")
+    wechat = models.CharField(max_length=64, verbose_name="代理商微信", blank=True)
 
     def __unicode__(self):
         return self.name
