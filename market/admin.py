@@ -10,6 +10,7 @@ class SoftenerAdmin(admin.ModelAdmin):
                     'salt_tank_capacity', 'resin_quantity', 'resin_tank_size', 'regeneration_time',
                     'maximum_water_hardness', 'maximum_grains', 'maximum_iron_treatment')
 
+
 class PurifierAdmin(admin.ModelAdmin):
     list_display = ('identification', 'description', 'price', 'outline_dimension', 'interface_size',
                     'filtering_accuracy', 'rated_flow', 'maximum_flow', 'water_pressure', 'water_temperature',

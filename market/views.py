@@ -106,7 +106,7 @@ def maintenance(request):
             return render_to_response('maintenance_choose.html', {"numbers": numbers})
 
     # province
-    province = Province.objects.values("name")
+    provinces = Province.objects.values("name")
 
     # GE
     appliance = []
@@ -123,18 +123,21 @@ def maintenance(request):
         item = (value["identification"], value["name"])
         equipment.append(item)
 
-    return render_to_response('maintenance.html', {"appliance": appliance, "equipment": equipment, "province": province})
+    return render_to_response('maintenance.html', {"appliance": appliance, "equipment": equipment,
+                                                   "provinces": provinces})
 
 
 @csrf_exempt
 def cities(request):
-    city_list = City.objects.filter(province=request.POST.get("province", "")).values("name")
+    province = Province.objects.get(name=request.POST.get("province", ""))
+    city_list = province.city_set.all()
     return render_to_response('cities.html', {"cities": city_list})
 
 
 @csrf_exempt
 def counties(request):
-    county_list = County.objects.filter(city=request.POST.get("city", "")).values("name")
+    city = City.objects.get(name=request.POST.get("city", ""))
+    county_list = city.county_set.all()
     return render_to_response('counties.html', {"counties": county_list})
 
 

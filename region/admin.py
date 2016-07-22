@@ -4,15 +4,15 @@ from django.contrib import admin
 from region.models import Province, City, County
 
 
-class ProvinceAdmin(admin):
+class ProvinceAdmin(admin.ModelAdmin):
     list_display = ('name', 'e_name')
 
 
-class CityAdmin(admin):
+class CityAdmin(admin.ModelAdmin):
     list_display = ('name', 'e_name', 'province')
 
 
-class CountyAdmin(admin):
+class CountyAdmin(admin.ModelAdmin):
     list_display = ('name', 'e_name', 'city')
 
 

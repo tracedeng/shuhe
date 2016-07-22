@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
 from django.db import models
@@ -12,6 +13,9 @@ class Province(models.Model):
     class Meta:
         verbose_name_plural = "省"
 
+    def __unicode__(self):
+        return self.name
+
 
 class City(models.Model):
     name = models.CharField(max_length=16, verbose_name="市名")
@@ -22,6 +26,9 @@ class City(models.Model):
     class Meta:
         verbose_name_plural = "市"
 
+    def __unicode__(self):
+        return self.name
+
 
 class County(models.Model):
     name = models.CharField(max_length=16, verbose_name="区名/县名")
@@ -31,3 +38,6 @@ class County(models.Model):
 
     class Meta:
         verbose_name_plural = "区/县"
+
+    def __unicode__(self):
+        return self.name
