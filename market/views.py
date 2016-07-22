@@ -189,6 +189,7 @@ class AgentForm(forms.Form):
     openid = forms.CharField(max_length=64)
 
 
+@csrf_exempt
 def order(request):
     if request.method == 'GET':
         # 从微信菜单跳转过来
@@ -216,9 +217,13 @@ def order(request):
     else:
         # 登录，先保存Agent
         f = AgentForm(request.POST)
-        agent = Agent(name=f['name'], phone=f['phone'], openid=f['openid'])
-        agent.save()
-        return render_to_response("order.html", {"name": f['name'], "phone": f['phone']})
+        if f.is_valid():
+            cd = f.cleaned_data
+            agent = Agent(name=cd['name'], phone=cd['phone'], openid=cd['openid'])
+            agent.save()
+            return render_to_response("order.html", {"name": cd['name'], "phone": cd['phone']})
+        else:
+            return render_to_response('login.html')
 
 
 def index(request):
