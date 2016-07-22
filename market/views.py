@@ -146,10 +146,14 @@ def maintenance_apply(request):
             ma = MaintenanceAuxiliary(uuid=guid, equipment=equipment, number=device[1])
             ma.save()
 
-        auxiliary = MaintenanceAuxiliary.objects.filter(uuid=guid)
+        mas = MaintenanceAuxiliary.objects.filter(uuid=guid)
         m = Maintenance(name=cd['name'], phone=cd['phone'], fix_address=cd["fix_address"], fix_date=cd["fix_date"],
-                        apply_time=now, uuid=guid, auxiliary=auxiliary, handled="no")
+                        apply_time=now, uuid=guid, handled="no")
         m.save()
+
+        # 多对多关系
+        for ma in mas:
+            m.auxiliary.add(ma)
         errors = None
     else:
         errors = f.errors

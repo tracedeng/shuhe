@@ -73,7 +73,8 @@ class AgentAdmin(admin.ModelAdmin):
 
 
 class MaintenanceAdmin(admin.ModelAdmin):
-    list_display = ('first_name', 'last_name', 'email')
+    list_display = ('name', 'phone', 'fix_address', 'apply_time', 'uuid', 'auxiliary', 'handled')
+    filter_horizontal = ("auxiliary",)
 
 
 class OrderAdmin(admin.ModelAdmin):
@@ -97,5 +98,5 @@ admin.site.register(CircularSpec, CircularSpecAdmin)
 admin.site.register(HiddenSpec, HiddenSpecAdmin)
 
 admin.site.register(Agent, AgentAdmin)
-admin.site.register(Maintenance)
+admin.site.register(Maintenance, MaintenanceAdmin)
 admin.site.register(Order)

@@ -214,7 +214,7 @@ class Agent(models.Model):
 
 
 class MaintenanceAuxiliary(models.Model):
-    uuid = models.UUIDField(max_length=32)
+    uuid = models.UUIDField(max_length=32, verbose_name="申请编号")
     equipment = models.ForeignKey(Equipment, verbose_name='型号')
     number = models.BigIntegerField(verbose_name='数量')
 
@@ -226,14 +226,14 @@ class MaintenanceAuxiliary(models.Model):
 
 
 class Maintenance(models.Model):
-    name = models.CharField(max_length=128)
-    phone = models.CharField(max_length=32)
-    fix_address = models.CharField(max_length=32)
-    fix_date = models.DateField()
-    apply_time = models.TimeField()
-    uuid = models.UUIDField(max_length=32)
+    name = models.CharField(max_length=128, verbose_name="姓名")
+    phone = models.CharField(max_length=32, verbose_name="电话")
+    fix_address = models.CharField(max_length=32, verbose_name="安装地址")
+    fix_date = models.DateField(verbose_name="安装日期")
+    apply_time = models.TimeField(verbose_name="申请时间")
+    uuid = models.UUIDField(max_length=32, verbose_name="申请编号")
     auxiliary = models.ManyToManyField(MaintenanceAuxiliary, verbose_name="设备及数量")
-    handled = models.CharField(max_length=8)
+    handled = models.CharField(max_length=8, verbose_name="是否处理")
 
     def __unicode__(self):
         return self.name
