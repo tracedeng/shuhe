@@ -27,6 +27,8 @@ urlpatterns = [
     url(r'^p/lg/([A-Za-z0-9]+)/$', views.lifegear_sub),
     url(r'^ma$', views.maintenance_apply),
     url(r'^m$', views.maintenance),
+    url(r'^city/$', views.cities),
+    url(r'^county/$', views.counties),
     url(r'^o/', views.maintenance),
     url(r'^$', views.index),
 ]

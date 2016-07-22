@@ -6,6 +6,7 @@ from models import Softener, Purifier, Drinking
 from models import EquipmentCategories, Equipment
 from models import VentilationSpec, HeatSpec, AirSpec, SoundOffSpec, StrongSpec, CircularSpec, HiddenSpec
 from models import Maintenance, MaintenanceAuxiliary
+from region.models import Province, City, County
 from django.views.decorators.csrf import csrf_exempt
 from django import forms
 import json
@@ -104,6 +105,9 @@ def maintenance(request):
             numbers = request.POST.getlist('numbers[]')
             return render_to_response('maintenance_choose.html', {"numbers": numbers})
 
+    # province
+    province = Province.objects.values("name")
+
     # GE
     appliance = []
     for iter_class in (Softener, Purifier, Drinking):
@@ -119,7 +123,19 @@ def maintenance(request):
         item = (value["identification"], value["name"])
         equipment.append(item)
 
-    return render_to_response('maintenance.html', {"appliance": appliance, "equipment": equipment})
+    return render_to_response('maintenance.html', {"appliance": appliance, "equipment": equipment, "province": province})
+
+
+@csrf_exempt
+def cities(request):
+    city_list = City.objects.filter(province=request.POST.get("province", "")).values("name")
+    return render_to_response('cities.html', {"cities": city_list})
+
+
+@csrf_exempt
+def counties(request):
+    county_list = County.objects.filter(city=request.POST.get("city", "")).values("name")
+    return render_to_response('counties.html', {"counties": county_list})
 
 
 class MaintenanceForm(forms.Form):
@@ -128,7 +144,6 @@ class MaintenanceForm(forms.Form):
     fix_address = forms.CharField(max_length=64)
     fix_date = forms.DateField()
     devices = forms.CharField(max_length=256)
-
 
 
 @csrf_exempt

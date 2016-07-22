@@ -57,28 +57,28 @@
                                         <label class="sr-only" for=".input-province">省</label>
                                         <select class="form-control" id="province">
                                             <option>--选择省--</option>
-                                            <option>北京</option>
-                                            <option>天津</option>
-                                            <option>上海</option>
+                                            {% for province in provinces %}
+                                                <option>{{ province.name }}</option>
+                                            {% endfor %}
                                         </select>
                                     </div>
                                     <div class="col-xs-4">
                                         <label class="sr-only" for=".input-city">市</label>
                                         <select class="form-control" id="city">
                                             <option>--选择市--</option>
-                                            <option>北京</option>
-                                            <option>天津</option>
-                                            <option>上海</option>
+                                            <!--<option>北京</option>-->
+                                            <!--<option>天津</option>-->
+                                            <!--<option>上海</option>-->
                                         </select>
                                     </div>
                                     <div class="col-xs-4">
                                         <label class="sr-only" for=".input-zone">区/县</label>
                                         <select class="form-control" id="zone">
                                             <option>--选择区县--</option>
-                                            <option>黄浦区</option>
-                                            <option>嘉定区</option>
-                                            <option>宝山区</option>
-                                            <option>浦东新区</option>
+                                            <!--<option>黄浦区</option>-->
+                                            <!--<option>嘉定区</option>-->
+                                            <!--<option>宝山区</option>-->
+                                            <!--<option>浦东新区</option>-->
                                         </select>
                                     </div>
                                 </div>
@@ -205,13 +205,46 @@
     </div>
 </div>
 
-
 {% endblock %}
 
 {% block bodyscript %}
     <script type="text/javascript">
         $(function(){
             $("#filter-date-from").datetimepicker({language:"zh-CN", pickerPosition:"bottom-right", autoclose:true, keyboardNavigation:true, minView:2});
+
+            $("#province").change(function(){
+                var province = $("#province option:selected").text();
+                $.ajax({
+                    type:"post",
+                    url:"city",
+                    data:{"province": province},
+                    dataType:"html",
+                    async:true,
+                    success:function(data){
+                        if(data.length > 0)
+                        {
+                            $("#city").html(data);
+                        }
+                    },
+                })
+            });
+
+            $("#city").change(function(){
+                var city = $("#city option:selected").text();
+                $.ajax({
+                    type:"post",
+                    url:"county",
+                    data:{"city": city},
+                    dataType:"html",
+                    async:true,
+                    success:function(data){
+                        if(data.length > 0)
+                        {
+                            $("#county").html(data);
+                        }
+                    },
+                })
+            });
 
             $(".btn-cancel").click(function(e){
                 $(".modal-choose").modal("hide");
@@ -257,7 +290,6 @@
                     },
                 });
             });
-
 
             // 提交维保
             $(".btn-submit").click(function(e){
