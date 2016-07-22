@@ -1,0 +1,64 @@
+{% extends "bootstrap.html" %}
+
+{% block title %}测试bootstraps{% endblock %}
+
+{% block body %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12 col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading text-center">简单的表单</div>
+                    <div class="panel-body query">
+                        <form role="form">
+                            <div class="form-group has-warning form-group-owner">
+                                <label class="sr-only" for=".input-owner">姓名</label>
+                                <div class="input-group input-owner">
+                                    <span class="input-group-addon"><li class="glyphicon glyphicon-user"></li></span>
+                                    <input type="text" class="form-control" placeholder="姓名">
+                                    <span class="input-group-addon">*</span>
+                                </div>
+                            </div>
+                        </form>
+                        <!--<form role="form">-->
+                            <!--<div class="form-group has-warning form-group-owner">-->
+                                <!--<label class="sr-only" for=".input-owner">时间</label>-->
+                                <!--<div class="input-group input-owner">-->
+                                    <!--<span class="input-group-addon"><li class="glyphicon glyphicon-user"></li></span>-->
+                                    <!--<input type="text" class="form-control" placeholder="时间">-->
+                                    <!--<span class="input-group-addon">*</span>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</form>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block bodyscript %}
+<script type="text/javascript">
+    //通过微信授权获取用户的openid
+    var g_user_openid = "";
+    function get_openid()
+    {
+        var code = $.QueryString("code");
+        var state = $.QueryString("state");
+        if(null != code)
+        {
+            $.ajax({
+                type:    "get",
+                url:    "../oauth.php?code=" + code,
+                async:    false,
+                dataType:    "json",
+                success:    function(data){
+                    if(0 == data.errcode)
+                    {
+                        g_user_openid = data.result.openid;
+                    }
+                }
+            });
+        }
+    }
+</script>
+{% endblock %}

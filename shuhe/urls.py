@@ -29,7 +29,7 @@ urlpatterns = [
     url(r'^m$', views.maintenance),
     url(r'^city$', views.cities),
     url(r'^county$', views.counties),
-    url(r'^o/', views.maintenance),
+    url(r'^o', views.order),
     url(r'^$', views.index),
 ]
 

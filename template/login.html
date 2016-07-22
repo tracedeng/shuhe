@@ -1,0 +1,92 @@
+{% extends "bootstrap.html" %}
+
+{% load staticfiles %}
+
+{% block headstyle %}
+.panel {
+    margin-top: 10px;
+}
+
+.btn-submit {
+    float: right;
+}
+{% endblock %}
+
+{% block title %}合作伙伴登录{% endblock %}
+
+{% block body %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12 col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading text-center">填写真实姓名和手机号</div>
+                    <div class="panel-body query">
+                        <form role="form" action="" method="post">
+                            <div class="form-group has-warning form-group-owner">
+                                <label class="sr-only" for=".input-owner">姓名</label>
+                                <div class="input-group input-owner">
+                                    <span class="input-group-addon"><li class="glyphicon glyphicon-user"></li></span>
+                                    <input type="text" class="form-control" placeholder="姓名">
+                                    <span class="input-group-addon">*</span>
+                                </div>
+                            </div>
+
+                            <div class="form-group has-warning form-group-owner">
+                                <label class="sr-only" for=".input-phone">手机号</label>
+                                <div class="input-group input-phone">
+                                    <span class="input-group-addon"><li class="glyphicon glyphicon-phone"></li></span>
+                                    <input type="text" class="form-control" placeholder="手机号">
+                                    <span class="input-group-addon">*</span>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-success btn-submit">
+                            提交维保
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 col-xs-12 hidden">
+                <span id="openid">{{ openid }}</span>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block bodyscript %}
+    <script type="text/javascript">
+        $(function(){
+            // 提交维保
+            $(".btn-submit").click(function(e){
+                // 姓名
+                var name = $(".input-owner input")[0].value;
+                var phone = $(".input-phone input")[0].value;
+                var address = Array($("#province option:selected").text(), $("#city option:selected").text(), $("#county option:selected").text()).join('');
+                var fix_date = $(".date input")[0].value;   // 读input的value
+                var devices = Array();
+                $.each($(".checked-device .list-group-item"), function(i, item){
+                    var device = $(this).find(".device").text();
+                    var num = $(this).find(".num")[0].value;
+                    devices.push(Array(device, num));
+                });
+
+                $.ajax({
+                    type:"post",
+                    url:"ma",
+                    data:{"name": name, "phone": phone, "fix_address": address, "fix_date": fix_date, "devices": JSON.stringify(devices)},
+                    dataType:"html",
+                    async:true,
+                    success:function(data){
+                        if(data.length > 0){
+                            $(".modal-body-feedback").html(data)
+                            $(".modal-feedback").modal("show");
+                            $(".btn-cancel-feedback").click(function(e){
+                                $(".modal-feedback").modal("hide");
+                            });
+                        }
+                    },
+                });
+            });
+        })
+    </script>
+{% endblock %}

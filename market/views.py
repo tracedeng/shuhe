@@ -6,6 +6,7 @@ from models import Softener, Purifier, Drinking
 from models import EquipmentCategories, Equipment
 from models import VentilationSpec, HeatSpec, AirSpec, SoundOffSpec, StrongSpec, CircularSpec, HiddenSpec
 from models import Maintenance, MaintenanceAuxiliary
+from models import Agent
 from region.models import Province, City, County
 from django.views.decorators.csrf import csrf_exempt
 from django import forms
@@ -179,6 +180,34 @@ def maintenance_apply(request):
     # device_number = models.ManyToManyField(MaintenanceAuxiliary, verbose_name="设备及数量")
     # print json.loads(request.POST.get('devices'))
     return render_to_response('maintenance_apply.html', {"yes": True, "errors": errors})
+
+
+class AgentForm(forms.Form):
+    name = forms.CharField(max_length=32, label="姓名")
+    phone = forms.CharField(max_length=16)
+
+
+def order(request):
+    # 获取openid
+    code = request.POST.get("code")
+    print code
+    print "hello"
+    code = request.GET.get("code")
+    print code
+    conn = httplib.HTTPSConnection("api.weixin.qq.com")
+    url = "/sns/oauth2/access_token?appid=wxe577b89ef194f974&secret=22c12dfc8ab1f4717238e8a909947748" \
+          "&code=%s&grant_type=authorization_code" % code
+    conn.request("GET", url)
+    res = conn.getresponse()
+    print res
+    if res.status == 200:
+        openid = "test"
+        # 验证是否已经绑定的openid
+        agent = Agent.objects.get(wechat=openid).value("name", "phone")
+        if agent:
+            return render_to_response("order.html", {"name": agent.name, "phone": agent.phone})
+
+    return render_to_response('login.html', {'openid': openid})
 
 
 def index(request):
