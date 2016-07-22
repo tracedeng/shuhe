@@ -8,7 +8,8 @@ from models import VentilationSpec, HeatSpec, AirSpec, SoundOffSpec, StrongSpec,
 from models import Maintenance, MaintenanceAuxiliary
 from django.views.decorators.csrf import csrf_exempt
 from django import forms
-import json, uuid
+import json
+import uuid
 from datetime import datetime
 
 

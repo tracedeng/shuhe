@@ -264,7 +264,7 @@
                 // 姓名
                 var name = $(".input-owner input")[0].value;
                 var phone = $(".input-phone input")[0].value;
-                var address = array($("#province option:selected").text, $("#city option:selected").text, $("#zone option:selected").text).join('');
+                var address = Array($("#province option:selected").text(), $("#city option:selected").text(), $("#zone option:selected").text()).join('');
                 var fix_date = $(".date input")[0].value;   // 读input的value
                 var devices = Array();
                 $.each($(".checked-device .list-group-item"), function(i, item){
