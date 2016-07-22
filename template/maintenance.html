@@ -55,32 +55,30 @@
                                     <div class="col-xs-4">
                                     <!--<input type="text" class="form-control" placeholder=".col-xs-2">-->
                                         <label class="sr-only" for=".input-province">省</label>
-                                        <select class="form-control">
-                                            <option>1</option>
-                                            <option>2</option>
-                                            <option>3</option>
-                                            <option>4</option>
-                                            <option>5</option>
+                                        <select class="form-control" id="province">
+                                            <option>--选择省--</option>
+                                            <option>北京</option>
+                                            <option>天津</option>
+                                            <option>上海</option>
                                         </select>
                                     </div>
                                     <div class="col-xs-4">
                                         <label class="sr-only" for=".input-city">市</label>
-                                        <select class="form-control">
-                                            <option>1</option>
-                                            <option>2</option>
-                                            <option>3</option>
-                                            <option>4</option>
-                                            <option>5</option>
+                                        <select class="form-control" id="city">
+                                            <option>--选择市--</option>
+                                            <option>北京</option>
+                                            <option>天津</option>
+                                            <option>上海</option>
                                         </select>
                                     </div>
                                     <div class="col-xs-4">
                                         <label class="sr-only" for=".input-zone">区/县</label>
-                                        <select class="form-control">
-                                            <option>1</option>
-                                            <option>2</option>
-                                            <option>3</option>
-                                            <option>4</option>
-                                            <option>5</option>
+                                        <select class="form-control" id="zone">
+                                            <option>--选择区县--</option>
+                                            <option>黄浦区</option>
+                                            <option>嘉定区</option>
+                                            <option>宝山区</option>
+                                            <option>浦东新区</option>
                                         </select>
                                     </div>
                                 </div>
@@ -266,8 +264,8 @@
                 // 姓名
                 var name = $(".input-owner input")[0].value;
                 var phone = $(".input-phone input")[0].value;
-                var address = "临川";
-                var fix_date = "2016-07-20";
+                var address = array($("#province option:selected").text, $("#city option:selected").text, $("#zone option:selected").text).join('');
+                var fix_date = $(".date input")[0].value;   // 读input的value
                 var devices = Array();
                 $.each($(".checked-device .list-group-item"), function(i, item){
                     var device = $(this).find(".device").text();

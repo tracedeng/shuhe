@@ -73,7 +73,7 @@ class AgentAdmin(admin.ModelAdmin):
 
 
 class MaintenanceAdmin(admin.ModelAdmin):
-    list_display = ('name', 'phone', 'fix_address', 'apply_time', 'uuid', 'auxiliary', 'handled')
+    list_display = ('name', 'phone', 'fix_address', 'apply_time', 'uuid', 'handled')
     filter_horizontal = ("auxiliary",)
 
 

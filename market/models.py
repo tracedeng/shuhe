@@ -219,7 +219,7 @@ class MaintenanceAuxiliary(models.Model):
     number = models.BigIntegerField(verbose_name='数量')
 
     def __unicode__(self):
-        return u"%s %s" % (self.equipment, self.number)
+        return u"设备型号：%s => 数量：%s" % (self.equipment, self.number)
 
     class Meta:
         verbose_name_plural = "维保设备及数量"
