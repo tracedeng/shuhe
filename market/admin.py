@@ -79,7 +79,7 @@ class MaintenanceAdmin(admin.ModelAdmin):
 
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('agent', 'receipt_address', 'receipt_date', 'order_time', 'uuid', 'payed', 'shipped')
+    list_display = ('agent', 'receipt_address', 'receipt_date', 'order_time', 'uuid', 'payed', 'shipped', 'valid')
     filter_horizontal = ("auxiliary",)
 
 # GE

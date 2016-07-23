@@ -78,8 +78,9 @@ class Equipment(models.Model):
     identification = models.CharField(max_length=32, verbose_name="型号")
     description = models.CharField(max_length=64, verbose_name="型号描述")
     name = models.CharField(max_length=64, verbose_name="名称")
+    session = models.CharField(max_length=32, verbose_name="公司", choices=(("GE", "GE"), ("lifegear", "台湾乐奇")), default="lifegear")
 
-    categories = models.ForeignKey(EquipmentCategories, verbose_name="大类")
+    categories = models.ForeignKey(EquipmentCategories, verbose_name="大类", blank=True)
 
     class Meta:
         verbose_name_plural = "乐奇电器型号"
@@ -262,12 +263,12 @@ class Order(models.Model):
     uuid = models.UUIDField(max_length=32, verbose_name="订单编号")
     payed = models.CharField(max_length=8, verbose_name="支付", choices=(('yes', '已支付'), ('no', '未支付')))
     shipped = models.CharField(max_length=16, verbose_name="是否发货", choices=(('yes', '已发货'), ('no', '未发货')))
-    valid = models.CharField(max_length=16, verbose_name="订单是否有效", choices=(('valid', '有效'), ('invalid', '无效订单')))
+    valid = models.CharField(max_length=16, verbose_name="订单是否有效", choices=(('valid', '有效'), ('invalid', '无效')))
 
     auxiliary = models.ManyToManyField(OrderAuxiliary, verbose_name="设备及数量")
 
     def __unicode__(self):
-        return self.uuid
+        return self.agent.name
 
     class Meta:
         verbose_name_plural = "订单"

@@ -297,11 +297,12 @@
                     async:true,
                     success:function(data){
                         if(data.length > 0){
-                            $(".modal-body-feedback").html(data)
-                            $(".modal-feedback").modal("show");
-                            $(".btn-cancel-feedback").click(function(e){
-                                $(".modal-feedback").modal("hide");
-                            });
+                        window.location="pay";
+                            //$(".modal-body-feedback").html(data)
+                            //$(".modal-feedback").modal("show");
+                            //$(".btn-cancel-feedback").click(function(e){
+                            //    $(".modal-feedback").modal("hide");
+                            //});
                         }
                     },
                 });
