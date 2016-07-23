@@ -15,6 +15,7 @@
 {% block extscript %}
 <script type="text/javascript" src="{% static 'js/bootstrap-datetimepicker.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/bootstrap-datetimepicker.zh-CN.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jweixin-1.0.0.js' %}"></script>
 {% endblock %}
 
 {% block extcss %}
@@ -50,8 +51,9 @@
                             </div>
 
                             <div class="form-group has-warning form-group-owner">
-                                <label class="sr-only" for=".input-address">安装地址</label>
-                                <div class="row">
+                                <label for=".input-address">选择安装地址</label>
+                                <!--<label class="sr-only" for=".input-address">安装地址</label>-->
+                                <!--<div class="row">-->
                                     <div class="col-xs-4">
                                     <!--<input type="text" class="form-control" placeholder=".col-xs-2">-->
                                         <label class="sr-only" for=".input-province">省</label>
@@ -290,6 +292,7 @@
                             $(".modal-feedback").modal("show");
                             $(".btn-cancel-feedback").click(function(e){
                                 $(".modal-feedback").modal("hide");
+                                //wx.closeWindow();
                             });
                         }
                     },

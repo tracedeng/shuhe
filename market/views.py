@@ -309,6 +309,7 @@ def place_order(request):
 
 @csrf_exempt
 def pay(request):
+
     return render_to_response('pay.html')
 
 

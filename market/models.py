@@ -78,12 +78,12 @@ class Equipment(models.Model):
     identification = models.CharField(max_length=32, verbose_name="型号")
     description = models.CharField(max_length=64, verbose_name="型号描述")
     name = models.CharField(max_length=64, verbose_name="名称")
-    session = models.CharField(max_length=32, verbose_name="公司", choices=(("GE", "GE"), ("lifegear", "台湾乐奇")), default="lifegear")
+    session = models.CharField(max_length=32, verbose_name="公司", choices=(("GE", "通用电气"), ("lifegear", "台湾乐奇")))
 
-    categories = models.ForeignKey(EquipmentCategories, verbose_name="大类", blank=True)
+    categories = models.ForeignKey(EquipmentCategories, verbose_name="大类", blank=True, null=True)
 
     class Meta:
-        verbose_name_plural = "乐奇电器型号"
+        verbose_name_plural = "电器型号"
 
     def __unicode__(self):
         return self.identification
@@ -234,7 +234,7 @@ class Maintenance(models.Model):
     apply_time = models.TimeField(verbose_name="申请时间")
     uuid = models.UUIDField(max_length=32, verbose_name="申请编号")
     auxiliary = models.ManyToManyField(MaintenanceAuxiliary, verbose_name="设备及数量")
-    handled = models.CharField(max_length=8, verbose_name="是否处理")
+    handled = models.CharField(max_length=8, verbose_name="是否处理", choices=(("yes", "已处理"), ("no", "未处理")))
 
     def __unicode__(self):
         return self.name

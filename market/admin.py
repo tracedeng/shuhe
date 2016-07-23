@@ -23,7 +23,7 @@ class DrinkingAdmin(admin.ModelAdmin):
 
 
 class EquipmentAdmin(admin.ModelAdmin):
-    list_display = ('identification', 'description', 'name')
+    list_display = ('identification', 'description', 'name', 'session')
 
 
 class EquipmentCategoriesAdmin(admin.ModelAdmin):
@@ -100,4 +100,4 @@ admin.site.register(HiddenSpec, HiddenSpecAdmin)
 
 admin.site.register(Agent, AgentAdmin)
 admin.site.register(Maintenance, MaintenanceAdmin)
-admin.site.register(Order)
+admin.site.register(Order, OrderAdmin)
