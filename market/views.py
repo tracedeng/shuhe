@@ -190,6 +190,25 @@ class AgentForm(forms.Form):
     openid = forms.CharField(max_length=64)
 
 
+def get_devices():
+    # GE
+    appliance = []
+    for iter_class in (Softener, Purifier, Drinking):
+        values = iter_class.objects.values("identification", "description")  # 所有model 行
+        for value in values:
+            item = (value["identification"], value["description"])
+            appliance.append(item)
+
+    # 乐奇
+    values = Equipment.objects.values("identification", "name")
+    equipment = []
+    for value in values:
+        item = (value["identification"], value["name"])
+        equipment.append(item)
+
+    return {"appliance": appliance, "equipment": equipment}
+
+
 @csrf_exempt
 def order(request):
     if request.method == 'GET':
@@ -208,8 +227,13 @@ def order(request):
                 # 验证是否已经绑定的openid
                 try:
                     agent = Agent.objects.get(wechat=openid)
-                    return render_to_response("order.html",
-                                              {"name": agent.name, "phone": agent.phone, "openid": openid})
+                    provinces = Province.objects.values("name")
+                    devices = get_devices()
+                    return render_to_response("order.html", {"name": agent.name, "phone": agent.phone, "openid": openid,
+                                                             'provinces': provinces, "appliance": devices.appliance,
+                                                             "equipment": devices.equipment})
+
+
                 except Exception as e:
                     return render_to_response('login.html', {'openid': openid})
             else:
@@ -226,10 +250,16 @@ def order(request):
                 agent = Agent.objects.get(name=cd['name'], phone=cd['phone'])
                 agent.wechat = cd['openid']
                 agent.save()
-                return render_to_response("order.html", {"name": cd['name'], "phone": cd['phone']})
+
+                provinces = Province.objects.values("name")
+                devices = get_devices()
+                return render_to_response("order.html", {"name": cd['name'], "phone": cd['phone'],
+                                                         "openid": cd['openid'], 'provinces': provinces,
+                                                         "appliance": devices.appliance, "equipment": devices.equipment})
+                                                             
             except Exception as e:
                 errors = ["您不是有效的合作伙伴。"]
-                return render_to_response('login.html', {"errors": errors})
+                return render_to_response('login.html', {"errors": errors, 'openid': cd['openid']})
         else:
             return render_to_response('login.html')
 

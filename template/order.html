@@ -21,21 +21,21 @@
 <link rel="stylesheet" href="{% static 'css/bootstrap-datetimepicker.min.css' %}" >
 {% endblock %}
 
-{% block title %}官方维保{% endblock %}
+{% block title %}下载订单{% endblock %}
 
 {% block body %}
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12 col-xs-12">
                 <div class="panel panel-default">
-                    <div class="panel-heading text-center">填写维保表单</div>
+                    <div class="panel-heading text-center">填写订单</div>
                     <div class="panel-body query">
                         <form role="form">
                             <div class="form-group has-warning form-group-owner">
                                 <label class="sr-only" for=".input-owner">姓名</label>
                                 <div class="input-group input-owner">
                                     <span class="input-group-addon"><li class="glyphicon glyphicon-user"></li></span>
-                                    <input type="text" class="form-control" placeholder="姓名" value="{{ name }}">
+                                    <input type="text" class="form-control" placeholder="姓名" value="{{ name }}" disabled>
                                     <span class="input-group-addon">*</span>
                                 </div>
                             </div>
@@ -44,7 +44,7 @@
                                 <label class="sr-only" for=".input-phone">手机号</label>
                                 <div class="input-group input-phone">
                                     <span class="input-group-addon"><li class="glyphicon glyphicon-phone"></li></span>
-                                    <input type="text" class="form-control" placeholder="手机号" value="{{ phone }}>
+                                    <input type="text" class="form-control" placeholder="手机号" value="{{ phone }}" disabled>
                                     <span class="input-group-addon">*</span>
                                 </div>
                             </div>
@@ -53,7 +53,7 @@
                                 <label class="sr-only" for=".input-openid">openid</label>
                                 <div class="input-group openid">
                                     <!--<span class="input-group-addon"><li class="glyphicon glyphicon-phone"></li></span>-->
-                                    <input type="text" class="form-control" placeholder="openid" value="{{ openid }}>
+                                    <input type="text" class="form-control" placeholder="openid" value="{{ openid }}" disabled>
                                     <!--<span class="input-group-addon">*</span>-->
                                 </div>
                             </div>
