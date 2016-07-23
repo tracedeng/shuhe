@@ -1,13 +1,34 @@
 {% extends "bootstrap.html" %}
 
-{% block title %}测试bootstraps{% endblock %}
+{% load staticfiles %}
+
+{% block headstyle %}
+.panel {
+    margin-top: 10px;
+}
+
+.btn-submit {
+    float: right;
+}
+{% endblock %}
+
+{% block extscript %}
+<script type="text/javascript" src="{% static 'js/bootstrap-datetimepicker.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/bootstrap-datetimepicker.zh-CN.js' %}"></script>
+{% endblock %}
+
+{% block extcss %}
+<link rel="stylesheet" href="{% static 'css/bootstrap-datetimepicker.min.css' %}" >
+{% endblock %}
+
+{% block title %}官方维保{% endblock %}
 
 {% block body %}
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12 col-xs-12">
                 <div class="panel panel-default">
-                    <div class="panel-heading text-center">简单的表单</div>
+                    <div class="panel-heading text-center">填写维保表单</div>
                     <div class="panel-body query">
                         <form role="form">
                             <div class="form-group has-warning form-group-owner">
@@ -18,45 +39,273 @@
                                     <span class="input-group-addon">*</span>
                                 </div>
                             </div>
+
+                            <div class="form-group has-warning form-group-owner">
+                                <label class="sr-only" for=".input-phone">手机号</label>
+                                <div class="input-group input-phone">
+                                    <span class="input-group-addon"><li class="glyphicon glyphicon-phone"></li></span>
+                                    <input type="text" class="form-control" placeholder="手机号" value="{{ phone }}>
+                                    <span class="input-group-addon">*</span>
+                                </div>
+                            </div>
+
+                            <div class="form-group has-warning form-group-openid hidden">
+                                <label class="sr-only" for=".input-openid">openid</label>
+                                <div class="input-group openid">
+                                    <!--<span class="input-group-addon"><li class="glyphicon glyphicon-phone"></li></span>-->
+                                    <input type="text" class="form-control" placeholder="openid" value="{{ openid }}>
+                                    <!--<span class="input-group-addon">*</span>-->
+                                </div>
+                            </div>
+
+                            <div class="form-group has-warning form-group-owner">
+                                <label class="sr-only" for=".input-address">收货地址</label>
+                                <div class="row">
+                                    <div class="col-xs-4">
+                                    <!--<input type="text" class="form-control" placeholder=".col-xs-2">-->
+                                        <label class="sr-only" for=".input-province">省</label>
+                                        <select class="form-control" id="province">
+                                            <option>--选择省--</option>
+                                            {% for province in provinces %}
+                                                <option>{{ province.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-xs-4">
+                                        <label class="sr-only" for=".input-city">市</label>
+                                        <select class="form-control" id="city">
+                                            <option>--选择市--</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-xs-4">
+                                        <label class="sr-only" for=".input-zone">区/县</label>
+                                        <select class="form-control" id="county">
+                                            <option>--选择区县--</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group has-warning form-group-owner fixed-date">
+                                <div class="input-append date" id="filter-date-from" data-date-format="yyyy-mm-dd">
+                                    <input type="text" class="form-control input-sm" placeholder="到货日期" readonly>
+                                    <span class="add-on"><i class="icon-remove"></i></span>
+                                    <span class="add-on"><i class="icon-calendar"></i></span>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target=".modal-choose" aria-label="Left Align">
+                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>选择产品型号
+                            </button>
                         </form>
-                        <div class="form-group has-warning form-group-owner">
-                            <label class="sr-only" for=".input-phone">手机号</label>
-                            <div class="input-group input-phone">
-                                <span class="input-group-addon"><li class="glyphicon glyphicon-phone"></li></span>
-                                <input type="text" class="form-control" placeholder="手机号" value="{{ phone }}">
-                                <span class="input-group-addon">*</span>
+                        <br />
+                        <br />
+                        <button type="submit" class="btn btn-success btn-submit">
+                            提交订单
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!--<button type="button" class="btn btn-default" data-toggle="modal" data-target=".modal">modal</button>-->
+        </div>
+    </div>
+    <div class="modal fade modal-choose" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <h3 class="modal-title">选择型号</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <h4>GE水系列</h4>
+                        </div>
+                        {% for tr in appliance %}
+                        <div class="col-xs-6">
+                            <div class="checkbox">
+                                <label><input type="checkbox">{{ tr.0 }}</label>
                             </div>
                         </div>
+                        {% endfor %}
+                        <div class="col-xs-12">
+                            <h4>乐奇电器</h4>
+                        </div>
+                        {% for tr in equipment %}
+                        <div class="col-xs-6">
+                            <div class="checkbox">
+                                <label><input type="checkbox">{{ tr.0 }}</label>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-danger btn-sm btn-confirm">确认
+                            <!--<i class="glyphicon glyphicon-ok"></i>-->
+                        </button>
+                        <button type="button" class="btn btn-warning btn-sm btn-cancel">取消
+                            <!--<i class="glyphicon glyphicon-remove"></i>-->
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <div class="modal fade modal-feedback" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <!--<button type="button" class="close" data-dismiss="modal">-->
+                    <!--<span aria-hidden="true">&times;</span>-->
+                    <!--<span class="sr-only">Close</span>-->
+                <!--</button>-->
+                <h3 class="modal-title">维保提交</h3>
+            </div>
+            <div class="modal-body modal-body-feedback">
+                <!--<p>你的维保申请已提交成功，工作人员正在处理。</p>-->
+            </div>
+            <div class="modal-footer">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-warning btn-sm btn-cancel-feedback">确认
+                        <!--<i class="glyphicon glyphicon-ok"></i>-->
+                    </button>
+                    <!--<button type="button" class="btn btn-warning btn-sm btn-cancel">取消-->
+                        <!--<i class="glyphicon glyphicon-remove"></i>-->
+                    <!--</button>-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock %}
 
 {% block bodyscript %}
-<script type="text/javascript">
-    //通过微信授权获取用户的openid
-    var g_user_openid = "";
-    function get_openid()
-    {
-        var code = $.QueryString("code");
-        var state = $.QueryString("state");
-        if(null != code)
-        {
-            $.ajax({
-                type:    "get",
-                url:    "../oauth.php?code=" + code,
-                async:    false,
-                dataType:    "json",
-                success:    function(data){
-                    if(0 == data.errcode)
-                    {
-                        g_user_openid = data.result.openid;
-                    }
+    <script type="text/javascript">
+        $(function(){
+            $("#filter-date-from").datetimepicker({language:"zh-CN", pickerPosition:"bottom-right", autoclose:true, keyboardNavigation:true, minView:2});
+
+            $("#province").change(function(){
+                if($("#province option:selected").index() != 0){
+                    var province = $("#province option:selected").text();
+                    $.ajax({
+                        type:"post",
+                        url:"city",
+                        data:{"province": province},
+                        dataType:"html",
+                        async:true,
+                        success:function(data){
+                            if(data.length > 0)
+                            {
+                                $("#city").html(data);
+                                $("#county").html("<option>--选择区县--</option>");
+                            }
+                        },
+                    })
                 }
             });
-        }
-    }
-</script>
+
+            $("#city").change(function(){
+                if($("#city option:selected").index() != 0){
+                    var city = $("#city option:selected").text();
+                    $.ajax({
+                        type:"post",
+                        url:"county",
+                        data:{"city": city},
+                        dataType:"html",
+                        async:true,
+                        success:function(data){
+                            if(data.length > 0)
+                            {
+                                $("#county").html(data);
+                            }
+                        },
+                    })
+                }
+            });
+
+            $(".btn-cancel").click(function(e){
+                $(".modal-choose").modal("hide");
+            });
+
+            $(".btn-confirm").click(function(e){
+                var numbers = Array();
+                //所有选中的型号
+                $.each($(":checkbox:checked"), function(i, item){
+                    number = $(this).parent().text();
+                    numbers.push(number);
+                });
+                $(".modal-choose").modal("hide");
+                $.ajax({
+                    type:"post",
+                    url:"m",
+                    data:{"numbers":numbers},
+                    dataType:"html",
+                    async:true,
+                    success:function(data){
+                        if(data.length > 0)
+                        {
+                            $(".list-group").remove();
+                            $(".fixed-date").after(data);
+
+                            // 元素出现后定义事件才有效果
+                            // 型号数量－1
+                            $(".btn-minus").click(function(e){
+                                var num = $(this).parent().next()[0];
+                                if(num.value - 0 > 1)
+                                {
+                                    num.value -= 1;
+                                }
+                            });
+
+                            // 型号数量＋1
+                            $(".btn-plus").click(function(e){
+                                var num = $(this).parent().prev()[0];
+                                num.value = num.value - 0 + 1;
+                            });
+
+                        }
+                    },
+                });
+            });
+
+            // 提交维保
+            $(".btn-submit").click(function(e){
+                // 姓名
+                var name = $(".input-owner input")[0].value;
+                var phone = $(".input-phone input")[0].value;
+                var openid = $(".input-openid input")[0].value;
+                var address = Array($("#province option:selected").text(), $("#city option:selected").text(), $("#county option:selected").text()).join('');
+                var fix_date = $(".date input")[0].value;   // 读input的value
+                var devices = Array();
+                $.each($(".checked-device .list-group-item"), function(i, item){
+                    var device = $(this).find(".device").text();
+                    var num = $(this).find(".num")[0].value;
+                    devices.push(Array(device, num));
+                });
+
+                $.ajax({
+                    type:"post",
+                    url:"po",
+                    data:{"name": name, "phone": phone, "openid": openid, "receipt_address": address,
+                        "receipt_date": fix_date, "devices": JSON.stringify(devices)},
+                    dataType:"html",
+                    async:true,
+                    success:function(data){
+                        if(data.length > 0){
+                            $(".modal-body-feedback").html(data)
+                            $(".modal-feedback").modal("show");
+                            $(".btn-cancel-feedback").click(function(e){
+                                $(".modal-feedback").modal("hide");
+                            });
+                        }
+                    },
+                });
+            });
+        })
+    </script>
 {% endblock %}

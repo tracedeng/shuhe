@@ -242,13 +242,29 @@ class Maintenance(models.Model):
         verbose_name_plural = "官方维保"
 
 
+class OrderAuxiliary(models.Model):
+    uuid = models.UUIDField(max_length=32, verbose_name="申请编号")
+    equipment = models.ForeignKey(Equipment, verbose_name='型号')
+    number = models.BigIntegerField(verbose_name='数量')
+
+    def __unicode__(self):
+        return u"设备型号：%s => 数量：%s" % (self.equipment, self.number)
+
+    class Meta:
+        verbose_name_plural = "订单设备及数量"
+
+
 class Order(models.Model):
-    receipt_address = models.CharField(max_length=128)
-    receipt_date = models.DateField()
-    agent = models.ForeignKey(Agent)
-    order_time = models.TimeField()
-    payed = models.CharField(max_length=8)
-    order_index = models.CharField(max_length=64)
+    agent = models.ForeignKey(Agent, verbose_name="合作伙伴")
+    receipt_address = models.CharField(max_length=128, verbose_name="收货地址")
+    receipt_date = models.DateField(verbose_name="收货时间")
+    order_time = models.TimeField(verbose_name="下单时间")
+    uuid = models.UUIDField(max_length=32, verbose_name="订单编号")
+    payed = models.CharField(max_length=8, verbose_name="支付", choices=(('yes', '已支付'), ('no', '未支付')))
+    shipped = models.CharField(max_length=16, verbose_name="是否发货", choices=(('yes', '已发货'), ('no', '未发货')))
+    valid = models.CharField(max_length=16, verbose_name="订单是否有效", choices=(('valid', '有效'), ('invalid', '无效订单')))
+
+    auxiliary = models.ManyToManyField(OrderAuxiliary, verbose_name="设备及数量")
 
     def __unicode__(self):
         return self.agent

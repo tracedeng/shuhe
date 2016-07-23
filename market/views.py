@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from django.shortcuts import render, render_to_response
+from django.shortcuts import render, render_to_response, HttpResponseRedirect
 
 # Create your views here.
 from models import Softener, Purifier, Drinking
@@ -7,6 +7,7 @@ from models import EquipmentCategories, Equipment
 from models import VentilationSpec, HeatSpec, AirSpec, SoundOffSpec, StrongSpec, CircularSpec, HiddenSpec
 from models import Maintenance, MaintenanceAuxiliary
 from models import Agent
+from models import Order, OrderAuxiliary
 from region.models import Province, City, County
 from django.views.decorators.csrf import csrf_exempt
 from django import forms
@@ -207,7 +208,8 @@ def order(request):
                 # 验证是否已经绑定的openid
                 try:
                     agent = Agent.objects.get(wechat=openid)
-                    return render_to_response("order.html", {"name": agent.name, "phone": agent.phone})
+                    return render_to_response("order.html",
+                                              {"name": agent.name, "phone": agent.phone, "openid": openid})
                 except Exception as e:
                     return render_to_response('login.html', {'openid': openid})
             else:
@@ -219,11 +221,66 @@ def order(request):
         f = AgentForm(request.POST)
         if f.is_valid():
             cd = f.cleaned_data
-            agent = Agent(name=cd['name'], phone=cd['phone'], openid=cd['openid'])
-            agent.save()
-            return render_to_response("order.html", {"name": cd['name'], "phone": cd['phone']})
+            # 验证伙伴
+            try:
+                agent = Agent.objects.get(name=cd['name'], phone=cd['phone'])
+                agent.wechat = cd['openid']
+                agent.save()
+                return render_to_response("order.html", {"name": cd['name'], "phone": cd['phone']})
+            except Exception as e:
+                errors = ["您不是有效的合作伙伴。"]
+                return render_to_response('login.html', {"errors": errors})
         else:
             return render_to_response('login.html')
+
+
+class OrderForm(forms.Form):
+    name = forms.CharField(max_length=32, label="姓名")
+    phone = forms.CharField(max_length=16)
+    openid = forms.CharField(max_length=64)
+    receipt_address = forms.CharField(max_length=64)
+    receipt_date = forms.DateField()
+    devices = forms.CharField(max_length=256)
+
+
+@csrf_exempt
+def place_order(request):
+    # 下订单
+    mutable_post = request.POST.copy() if request.method == 'POST' else request.GET.copy()
+    mutable_post["receipt_date"] = datetime.strptime(mutable_post["receipt_date"], "%Y-%m-%d").date()
+    f = OrderForm(mutable_post)
+    if f.is_valid():
+        cd = f.cleaned_data
+        guid = uuid.uuid1()
+        now = datetime.now()
+
+        devices = json.loads(cd['devices'])
+        for device in devices:
+            equipment = Equipment.objects.get(identification=device[0])
+            oa = OrderAuxiliary(uuid=guid, equipment=equipment, number=device[1])
+            oa.save()
+
+        agent = Agent.objects.get(name=cd['name'], phone=cd['phone'])
+        m = Order(agent=agent, receipt_address=cd["receipt_address"], receipt_date=cd["receipt_date"],
+                  order_time=now, uuid=guid, payed="no", shipped="no", valid="valid")
+        m.save()
+
+        # 多对多关系
+        oas = OrderAuxiliary.objects.filter(uuid=guid)
+        for oa in oas:
+            m.auxiliary.add(oa)
+        errors = None
+        # 重定向到支付页面
+        return HttpResponseRedirect('pay')
+    else:
+        errors = f.errors
+
+    return render_to_response('maintenance_apply.html', {"yes": True, "errors": errors})
+
+
+@csrf_exempt
+def pay(request):
+    return render_to_response('pay.html')
 
 
 def index(request):
