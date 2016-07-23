@@ -79,8 +79,8 @@ class MaintenanceAdmin(admin.ModelAdmin):
 
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('first_name', 'last_name', 'email')
-
+    list_display = ('agent', 'receipt_address', 'receipt_date', 'order_time', 'uuid', 'payed', 'shipped')
+    filter_horizontal = ("auxiliary",)
 
 # GE
 admin.site.register(Softener, SoftenerAdmin)

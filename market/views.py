@@ -230,8 +230,8 @@ def order(request):
                     provinces = Province.objects.values("name")
                     devices = get_devices()
                     return render_to_response("order.html", {"name": agent.name, "phone": agent.phone, "openid": openid,
-                                                             'provinces': provinces, "appliance": devices.appliance,
-                                                             "equipment": devices.equipment})
+                                                             'provinces': provinces, "appliance": devices['appliance'],
+                                                             "equipment": devices['equipment']})
 
 
                 except Exception as e:
@@ -253,10 +253,9 @@ def order(request):
 
                 provinces = Province.objects.values("name")
                 devices = get_devices()
-                return render_to_response("order.html", {"name": cd['name'], "phone": cd['phone'],
-                                                         "openid": cd['openid'], 'provinces': provinces,
-                                                         "appliance": devices.appliance, "equipment": devices.equipment})
-                                                             
+                return render_to_response("order.html", {"name": cd['name'], "phone": cd['phone'], "openid": cd['openid'],
+                                                         'provinces': provinces,"appliance": devices['appliance'],
+                                                         "equipment": devices['equipment']})
             except Exception as e:
                 errors = ["您不是有效的合作伙伴。"]
                 return render_to_response('login.html', {"errors": errors, 'openid': cd['openid']})

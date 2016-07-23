@@ -51,7 +51,7 @@
 
                             <div class="form-group has-warning form-group-openid hidden">
                                 <label class="sr-only" for=".input-openid">openid</label>
-                                <div class="input-group openid">
+                                <div class="input-group input-openid">
                                     <!--<span class="input-group-addon"><li class="glyphicon glyphicon-phone"></li></span>-->
                                     <input type="text" class="form-control" placeholder="openid" value="{{ openid }}" disabled>
                                     <!--<span class="input-group-addon">*</span>-->
@@ -163,7 +163,7 @@
                     <!--<span aria-hidden="true">&times;</span>-->
                     <!--<span class="sr-only">Close</span>-->
                 <!--</button>-->
-                <h3 class="modal-title">维保提交</h3>
+                <h3 class="modal-title">下单提交</h3>
             </div>
             <div class="modal-body modal-body-feedback">
                 <!--<p>你的维保申请已提交成功，工作人员正在处理。</p>-->
@@ -273,14 +273,14 @@
                 });
             });
 
-            // 提交维保
+            // 下单提交
             $(".btn-submit").click(function(e){
                 // 姓名
                 var name = $(".input-owner input")[0].value;
                 var phone = $(".input-phone input")[0].value;
                 var openid = $(".input-openid input")[0].value;
                 var address = Array($("#province option:selected").text(), $("#city option:selected").text(), $("#county option:selected").text()).join('');
-                var fix_date = $(".date input")[0].value;   // 读input的value
+                var receipt_date = $(".date input")[0].value;   // 读input的value
                 var devices = Array();
                 $.each($(".checked-device .list-group-item"), function(i, item){
                     var device = $(this).find(".device").text();
@@ -292,7 +292,7 @@
                     type:"post",
                     url:"po",
                     data:{"name": name, "phone": phone, "openid": openid, "receipt_address": address,
-                        "receipt_date": fix_date, "devices": JSON.stringify(devices)},
+                        "receipt_date": receipt_date, "devices": JSON.stringify(devices)},
                     dataType:"html",
                     async:true,
                     success:function(data){

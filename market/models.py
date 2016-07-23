@@ -267,7 +267,7 @@ class Order(models.Model):
     auxiliary = models.ManyToManyField(OrderAuxiliary, verbose_name="设备及数量")
 
     def __unicode__(self):
-        return self.agent
+        return self.uuid
 
     class Meta:
         verbose_name_plural = "订单"
