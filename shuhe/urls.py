@@ -32,6 +32,7 @@ urlpatterns = [
     url(r'^o', views.order),
     url(r'^po', views.place_order),
     url(r'^pay', views.pay),
+    url(r'^notice', views.pay_notice),
     url(r'^$', views.index),
 ]
 

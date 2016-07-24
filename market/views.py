@@ -9,6 +9,7 @@ from models import Maintenance, MaintenanceAuxiliary
 from models import Agent
 from models import Order, OrderAuxiliary
 from region.models import Province, City, County
+from wechat.views import Wechat
 from django.views.decorators.csrf import csrf_exempt
 from django import forms
 import json
@@ -23,21 +24,6 @@ def appliances(request):
     :param request:
     :return:
     """
-    # if request.method == 'POST':
-    #     form = ContactForm(request.POST)
-    #     if form.is_valid():
-    #         cd = form.cleaned_data
-    #         # send_mail(
-    #         #     cd['subject'],
-    #         #     cd['message'],
-    #         #     cd.get('email', 'noreply@example.com'),
-    #         #     ['siteowner@example.com'],
-    #         # )
-    #         return HttpResponseRedirect('/contact/thanks/')
-    # else:
-    #     form = ContactForm(initial={'subject': 'I love your site!'})
-    #
-    # return render_to_response('appliances_list.html', {'form': form})
     hidden_field = ('id', 'description', 'price')
     d = {}
     for iter_class in (Softener, Purifier, Drinking):
@@ -77,10 +63,7 @@ def lifegear_sub(request, sub):
     match = {"bd": "VentilationSpec", "ls": "VentilationSpec", "hbd": "VentilationSpec", "bd120": "VentilationSpec",
              "bd125": "VentilationSpec", "ss": "VentilationSpec", "wrv": "HeatSpec", "hrv": "HeatSpec",
              "glx": "AirSpec", "ev21": "SoundOffSpec", "ev28": "StrongSpec", "ecv": "CircularSpec", "hev": "HiddenSpec"}
-    # match = {"bd": "ventilationspec_set", "ls": "ventilationspec_set", "hbd": "ventilationspec_set",
-    #          "bd120": "ventilationspec_set", "bd125": "ventilationspec_set", "ss": "ventilationspec_set",
-    #          "wrv": "heatspec_set", "hrv": "heatspec_set", "glx": "airspec_set", "ev21": "soundoffspec_set",
-    #          "ev28": "strongspec_set", "ecv": "circularspec_set", "hev": "hiddenspec_set"}
+
     hidden_field = ('id', 'equipment')
     cls_fields = eval(match[sub])._meta.get_fields()
     fields = []
@@ -126,14 +109,10 @@ def maintenance(request):
         item = (value["identification"], value["name"])
         equipment.append(item)
 
-    from wechat.views import Wechat
-    signature = Wechat().signature()
-
+    signature = Wechat().signature(request.build_absolute_uri())
     if signature:
         return render_to_response('maintenance.html', {"appliance": appliance, "equipment": equipment,
-                                                       "provinces": provinces , "timestamp": signature["timestamp"],
-                                                       "nonce": signature["noncestr"],
-                                                       "signature": signature["signature"]})
+                                                       "provinces": provinces, "signature": signature})
 
     return render_to_response('maintenance.html', {"appliance": appliance, "equipment": equipment,
                                                    "provinces": provinces})
@@ -241,8 +220,6 @@ def order(request):
                     return render_to_response("order.html", {"name": agent.name, "phone": agent.phone, "openid": openid,
                                                              'provinces': provinces, "appliance": devices['appliance'],
                                                              "equipment": devices['equipment']})
-
-
                 except Exception as e:
                     return render_to_response('login.html', {'openid': openid})
             else:
@@ -318,8 +295,21 @@ def place_order(request):
 
 @csrf_exempt
 def pay(request):
+    signature = Wechat().signature(request.build_absolute_uri())
+    signature2 = Wechat.unified_order()
 
-    return render_to_response('pay.html')
+    return render_to_response('pay.html', {"signature": signature, "signature_order": signature2})
+
+
+def pay_notice(request):
+    try:
+        trade_no = Wechat.notice(request.POST)
+        if trade_no:
+            trade = Order.objects.get(uuid=trade_no)
+            trade.payed = "yes"
+            trade.save()
+    except Exception as e:
+        pass
 
 
 def index(request):

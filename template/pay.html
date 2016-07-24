@@ -22,3 +22,32 @@
         </div>
     </div>
 {% endblock %}
+
+
+{% block bodyscript %}
+    <script type="text/javascript">
+        $(function(){
+            $(".btn-pay").click(function(e){
+                wx.chooseWXPay({
+                    timestamp: {{ signature_order.timestamp }},
+                    nonceStr: '{{ signature_order.nonce_str }}',
+                    package: 'prepay_id={{ signature_order.prepay_id }}', // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
+                    signType: 'MD5',
+                    paySign: 'signature_order.sign',
+                    success: function (res) {
+                        // 支付成功后的回调函数
+                    }
+                });
+            });
+
+            wx.config({
+                debug: true,
+                appId: '{{ signature.appid }}',
+                timestamp: '{{ signature.timestamp }}',
+                nonceStr: '{{ signature.nonce }}',
+                signature: '{{ signature.signature }}',
+                jsApiList: ['closeWindow', 'chooseWXPay']
+            });
+        })
+    </script>
+{% endblock %}

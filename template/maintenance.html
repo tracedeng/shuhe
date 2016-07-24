@@ -301,10 +301,10 @@
 
             wx.config({
                 debug: true,
-                appId: 'wxe577b89ef194f974',
-                timestamp: '{{ timestamp }}',
-                nonceStr: '{{ nonce }}',
-                signature: '{{ signature }}',
+                appId: '{{ signature.appid }}',
+                timestamp: '{{ signature.timestamp }}',
+                nonceStr: '{{ signature.nonce }}',
+                signature: '{{ signature.signature }}',
                 jsApiList: ['closeWindow']
             });
         })
