@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'market',
     'region',
+    'wechat',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -134,3 +135,5 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
+
+CACHE_BACKEND = "locmem:///?timeout=7200&max_entries=10"

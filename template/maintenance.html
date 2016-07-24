@@ -292,11 +292,20 @@
                             $(".modal-feedback").modal("show");
                             $(".btn-cancel-feedback").click(function(e){
                                 $(".modal-feedback").modal("hide");
-                                //wx.closeWindow();
+                                wx.closeWindow();
                             });
                         }
                     },
                 });
+            });
+
+            wx.config({
+                debug: true,
+                appId: 'wxe577b89ef194f974',
+                timestamp: '{{ timestamp }}',
+                nonceStr: '{{ nonce }}',
+                signature: '{{ signature }}',
+                jsApiList: ['closeWindow']
             });
         })
     </script>

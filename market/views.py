@@ -126,6 +126,15 @@ def maintenance(request):
         item = (value["identification"], value["name"])
         equipment.append(item)
 
+    from wechat.views import Wechat
+    signature = Wechat().signature()
+
+    if signature:
+        return render_to_response('maintenance.html', {"appliance": appliance, "equipment": equipment,
+                                                       "provinces": provinces , "timestamp": signature["timestamp"],
+                                                       "nonce": signature["noncestr"],
+                                                       "signature": signature["signature"]})
+
     return render_to_response('maintenance.html', {"appliance": appliance, "equipment": equipment,
                                                    "provinces": provinces})
 
