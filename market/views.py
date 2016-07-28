@@ -270,8 +270,10 @@ def place_order(request):
         now = datetime.now()
 
         devices = json.loads(cd['devices'])
+        bill = 0
         for device in devices:
             equipment = Equipment.objects.get(identification=device[0])
+            bill = bill + equipment.price
             oa = OrderAuxiliary(uuid=guid, equipment=equipment, number=device[1])
             oa.save()
 
@@ -284,19 +286,23 @@ def place_order(request):
         oas = OrderAuxiliary.objects.filter(uuid=guid)
         for oa in oas:
             m.auxiliary.add(oa)
-        errors = None
-        # 重定向到支付页面
-        return HttpResponseRedirect('pay')
-    else:
-        errors = f.errors
 
-    return render_to_response('maintenance_apply.html', {"yes": True, "errors": errors})
+        return {"error": 0, "trade_no": guid, "bill": bill, "openid": cd["openid"]}
+    else:
+        # errors = f.errors
+        return {"error": 1}
+
+    # return render_to_response('maintenance_apply.html', {"yes": True, "errors": errors})
 
 
 @csrf_exempt
 def pay(request):
     signature = Wechat().signature(request.build_absolute_uri())
-    signature2 = Wechat.unified_order()
+    name = "合作伙伴下单"
+    trade_no = request.GET.get('no', '') 
+    fee = request.GET.get('bill', 0)
+    openid = request.GET.get('openid', '')
+    signature2 = Wechat().unified_order(name, trade_no, fee, request.META.REMOTE_ADDR, openid)
 
     return render_to_response('pay.html', {"signature": signature, "signature_order": signature2})
 

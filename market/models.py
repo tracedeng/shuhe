@@ -78,6 +78,7 @@ class Equipment(models.Model):
     identification = models.CharField(max_length=32, verbose_name="型号")
     description = models.CharField(max_length=64, verbose_name="型号描述")
     name = models.CharField(max_length=64, verbose_name="名称")
+    price = models.IntegerField(verbose_name="价格")
     session = models.CharField(max_length=32, verbose_name="公司", choices=(("GE", "通用电气"), ("lifegear", "台湾乐奇")))
 
     categories = models.ForeignKey(EquipmentCategories, verbose_name="大类", blank=True, null=True)

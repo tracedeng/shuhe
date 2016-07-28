@@ -294,16 +294,18 @@
                     url:"po",
                     data:{"name": name, "phone": phone, "openid": openid, "receipt_address": address,
                         "receipt_date": receipt_date, "devices": JSON.stringify(devices)},
-                    dataType:"html",
+                    dataType:"json",
                     async:true,
                     success:function(data){
-                        if(data.length > 0){
-                            window.location="pay";
-                            //$(".modal-body-feedback").html(data)
-                            //$(".modal-feedback").modal("show");
-                            //$(".btn-cancel-feedback").click(function(e){
-                            //    $(".modal-feedback").modal("hide");
-                            //});
+                        switch (data.errcode) {
+                            case 0:
+                                trade_no = data["trade_no"];
+                                bill = data["bill"];
+                                openid = data["openid"];
+                                redirect = "pay?no=" + trade_no + "&bill=" + bill + "&openid=" + openid;
+                                window.location = redirect;
+                            default:
+                                break;
                         }
                     },
                 });
