@@ -8,7 +8,7 @@ from market.models import Softener, Purifier,Drinking, Agent, Maintenance, Order
 class SoftenerAdmin(admin.ModelAdmin):
     list_display = ('identification', 'description', 'price', 'outline_dimension', 'interface_size', 'service_flow',
                     'salt_tank_capacity', 'resin_quantity', 'resin_tank_size', 'regeneration_time',
-                    'maximum_water_hardness', 'maximum_grains', 'maximum_iron_treatment')
+                    'maximum_water_hardness', 'maximum_grains', 'maximum_iron_treatment', 'equipment')
 
 
 class PurifierAdmin(admin.ModelAdmin):
@@ -23,7 +23,7 @@ class DrinkingAdmin(admin.ModelAdmin):
 
 
 class EquipmentAdmin(admin.ModelAdmin):
-    list_display = ('identification', 'description', 'name', 'session')
+    list_display = ('identification', 'description', 'name', 'price', 'session')
 
 
 class EquipmentCategoriesAdmin(admin.ModelAdmin):

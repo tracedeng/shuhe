@@ -299,7 +299,7 @@ def place_order(request):
 def pay(request):
     signature = Wechat().signature(request.build_absolute_uri())
     name = "合作伙伴下单"
-    trade_no = request.GET.get('no', '') 
+    trade_no = request.GET.get('no', '')
     fee = request.GET.get('bill', 0)
     openid = request.GET.get('openid', '')
     signature2 = Wechat().unified_order(name, trade_no, fee, request.META.REMOTE_ADDR, openid)

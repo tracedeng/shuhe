@@ -7,6 +7,37 @@ from django.db import models
 # Create your models here.
 
 
+class EquipmentCategories(models.Model):
+    categories = models.CharField(max_length=32, verbose_name="大类")
+    image = models.CharField(max_length=64, verbose_name="图片名称")
+    redirect = models.CharField(max_length=64, verbose_name="重定向目标")
+    group = models.CharField(max_length=64, verbose_name="组",
+                             choices=(('ventilation', '浴室暖房换气设备'), ('aeration', '新风通风设备')))
+
+    class Meta:
+        verbose_name_plural = "乐奇电器大类"
+
+    def __unicode__(self):
+        return self.categories
+
+
+class Equipment(models.Model):
+    identification = models.CharField(max_length=32, verbose_name="型号")
+    description = models.CharField(max_length=64, verbose_name="型号描述")
+    name = models.CharField(max_length=64, verbose_name="名称")
+    price = models.IntegerField(verbose_name="价格")
+    session = models.CharField(max_length=32, verbose_name="公司", choices=(("GE", "通用电气"), ("lifegear", "台湾乐奇")))
+
+    categories = models.ForeignKey(EquipmentCategories, verbose_name="大类", blank=True, null=True)
+
+    class Meta:
+        verbose_name_plural = "电器型号"
+
+    def __unicode__(self):
+        return self.identification
+        # return u"%s %s" % (self.name, self.identification)
+
+
 class Appliances(models.Model):
     identification = models.CharField(max_length=64, verbose_name="设备编号")
     description = models.CharField(max_length=256, verbose_name="设备")
@@ -14,6 +45,8 @@ class Appliances(models.Model):
 
     outline_dimension = models.CharField(max_length=64, verbose_name="外形尺寸")
     interface_size = models.CharField(max_length=32, verbose_name="接口尺寸")
+
+    equipment = models.ForeignKey(Equipment, verbose_name="设备编号")
 
     class Meta:
         abstract = True
@@ -58,37 +91,6 @@ class Drinking(Appliances):
 
     class Meta:
         verbose_name_plural = "GE直饮机"
-
-
-class EquipmentCategories(models.Model):
-    categories = models.CharField(max_length=32, verbose_name="大类")
-    image = models.CharField(max_length=64, verbose_name="图片名称")
-    redirect = models.CharField(max_length=64, verbose_name="重定向目标")
-    group = models.CharField(max_length=64, verbose_name="组",
-                             choices=(('ventilation', '浴室暖房换气设备'), ('aeration', '新风通风设备')))
-
-    class Meta:
-        verbose_name_plural = "乐奇电器大类"
-
-    def __unicode__(self):
-        return self.categories
-
-
-class Equipment(models.Model):
-    identification = models.CharField(max_length=32, verbose_name="型号")
-    description = models.CharField(max_length=64, verbose_name="型号描述")
-    name = models.CharField(max_length=64, verbose_name="名称")
-    price = models.IntegerField(verbose_name="价格")
-    session = models.CharField(max_length=32, verbose_name="公司", choices=(("GE", "通用电气"), ("lifegear", "台湾乐奇")))
-
-    categories = models.ForeignKey(EquipmentCategories, verbose_name="大类", blank=True, null=True)
-
-    class Meta:
-        verbose_name_plural = "电器型号"
-
-    def __unicode__(self):
-        return self.identification
-        # return u"%s %s" % (self.name, self.identification)
 
 
 class VentilationSpec(models.Model):
