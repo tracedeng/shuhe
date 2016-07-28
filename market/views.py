@@ -35,8 +35,12 @@ def appliances(request):
             if field.name in hidden_field:
                 continue
             item.append(field.verbose_name)
-            for value in values:
-                item.append(value[field.name])
+            if field.name == "equipment":
+                for ob in iter_class.objects.all():
+                    item.append(ob.equipment.identification)
+            else:
+                for value in values:
+                    item.append(value[field.name])
             items.append(item)
         d[iter_class.__name__.lower()] = items
 
@@ -83,39 +87,45 @@ def lifegear_sub(request, sub):
     return render_to_response('equipment_sub_list.html', {"equipment": equipment, "spec_th": fields, "spec": items})
 
 
-@csrf_exempt
-def maintenance(request):
-    # 选择产品型号后ajax局部刷新
-    if request.method == 'POST':
-        if request.POST.getlist('numbers[]', []):
-            numbers = request.POST.getlist('numbers[]')
-            return render_to_response('maintenance_choose.html', {"numbers": numbers})
-
-    # province
-    provinces = Province.objects.values("name")
-
+def get_devices():
     # GE
+    # appliance = []
+    # for iter_class in (Softener, Purifier, Drinking):
+    #     values = iter_class.objects.values("identification", "description")  # 所有model 行
+    #     for value in values:
+    #         item = (value["identification"], value["description"])
+    #         appliance.append(item)
+
+    values = Equipment.objects.filter(session="GE").values("identification", "name")
     appliance = []
-    for iter_class in (Softener, Purifier, Drinking):
-        values = iter_class.objects.values("identification", "description")  # 所有model 行
-        for value in values:
-            item = (value["identification"], value["description"])
-            appliance.append(item)
+    for value in values:
+        item = (value["identification"], value["name"])
+        appliance.append(item)
 
     # 乐奇
-    values = Equipment.objects.values("identification", "name")
+    values = Equipment.objects.filter(session="lifegear").values("identification", "name")
     equipment = []
     for value in values:
         item = (value["identification"], value["name"])
         equipment.append(item)
 
-    signature = Wechat().signature(request.build_absolute_uri())
-    if signature:
-        return render_to_response('maintenance.html', {"appliance": appliance, "equipment": equipment,
-                                                       "provinces": provinces, "signature": signature})
+    return {"appliance": appliance, "equipment": equipment}
 
-    return render_to_response('maintenance.html', {"appliance": appliance, "equipment": equipment,
-                                                   "provinces": provinces})
+
+@csrf_exempt
+def maintenance(request):
+    # 选择产品型号后ajax局部刷新
+    if request.method == 'POST':
+        numbers = request.POST.getlist('numbers[]', [])
+        return render_to_response('maintenance_choose.html', {"numbers": numbers})
+
+    # province devices signature
+    provinces = Province.objects.values("name")
+    devices = get_devices()
+    signature = Wechat().signature(request.build_absolute_uri())
+
+    return render_to_response('maintenance.html', {"appliance": devices["appliance"], "equipment": devices["equipment"],
+                                                   "provinces": provinces, "signature": signature})
 
 
 @csrf_exempt
@@ -176,25 +186,6 @@ class AgentForm(forms.Form):
     name = forms.CharField(max_length=32, label="姓名")
     phone = forms.CharField(max_length=16)
     openid = forms.CharField(max_length=64)
-
-
-def get_devices():
-    # GE
-    appliance = []
-    for iter_class in (Softener, Purifier, Drinking):
-        values = iter_class.objects.values("identification", "description")  # 所有model 行
-        for value in values:
-            item = (value["identification"], value["description"])
-            appliance.append(item)
-
-    # 乐奇
-    values = Equipment.objects.values("identification", "name")
-    equipment = []
-    for value in values:
-        item = (value["identification"], value["name"])
-        equipment.append(item)
-
-    return {"appliance": appliance, "equipment": equipment}
 
 
 @csrf_exempt

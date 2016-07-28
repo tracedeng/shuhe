@@ -39,14 +39,14 @@ class Equipment(models.Model):
 
 
 class Appliances(models.Model):
-    identification = models.CharField(max_length=64, verbose_name="设备编号")
+    equipment = models.ForeignKey(Equipment, verbose_name="设备编号")
+    # identification = models.CharField(max_length=64, verbose_name="设备编号")
     description = models.CharField(max_length=256, verbose_name="设备")
-    price = models.BigIntegerField(verbose_name="价格")
+    # price = models.BigIntegerField(verbose_name="价格")
 
     outline_dimension = models.CharField(max_length=64, verbose_name="外形尺寸")
     interface_size = models.CharField(max_length=32, verbose_name="接口尺寸")
 
-    equipment = models.ForeignKey(Equipment, verbose_name="设备编号")
 
     class Meta:
         abstract = True
