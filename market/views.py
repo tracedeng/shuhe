@@ -253,7 +253,7 @@ def order(request):
     if request.method == 'GET':
         # 从微信菜单跳转过来
         code = request.GET.get("code")
-        openid = Wechat.openid(code)
+        openid = Wechat().openid(code)
         if openid:
             # 验证是否已经绑定的openid
             try:
@@ -270,8 +270,8 @@ def order(request):
     else:
         # 登录，先保存Agent
         f = AgentForm(request.POST)
+        cd = f.cleaned_data
         if f.is_valid():
-            cd = f.cleaned_data
             try:
                 # 绑定合作伙伴openid
                 agent = Agent.objects.get(name=cd['name'], phone=cd['phone'])
@@ -287,7 +287,8 @@ def order(request):
                 errors = ["您不是有效的合作伙伴。"]
                 return render_to_response('login.html', {"errors": errors, 'openid': cd['openid']})
         else:
-            return render_to_response('login.html')
+            errors = ["输入有误，请检查。"]
+            return render_to_response('login.html', {"errors": errors, 'openid': cd['openid']})
 
 
 class OrderForm(forms.Form):
