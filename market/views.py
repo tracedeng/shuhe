@@ -35,6 +35,7 @@ def appliances(request):
             if field.name in hidden_field:
                 continue
             item.append(field.verbose_name)
+            # equipment是外键
             if field.name == "equipment":
                 for ob in iter_class.objects.all():
                     item.append(ob.equipment.identification)
@@ -49,7 +50,7 @@ def appliances(request):
 
 def lifegear(request):
     """
-    lifegear水系列产品展示
+    lifegear系列产品展示
     :param request:
     :return:
     """
@@ -60,6 +61,12 @@ def lifegear(request):
 
 
 def lifegear_sub(request, sub):
+    """
+    lifegear 子系列产品展示
+    :param request:
+    :param sub: 大类
+    :return:
+    """
     ec = EquipmentCategories.objects.get(redirect=sub)  # 获取对应的大类
     eq_set = ec.equipment_set.all()          # 获取大类所有型号
     equipment = eq_set.values("identification", "description")
@@ -89,13 +96,6 @@ def lifegear_sub(request, sub):
 
 def get_devices():
     # GE
-    # appliance = []
-    # for iter_class in (Softener, Purifier, Drinking):
-    #     values = iter_class.objects.values("identification", "description")  # 所有model 行
-    #     for value in values:
-    #         item = (value["identification"], value["description"])
-    #         appliance.append(item)
-
     values = Equipment.objects.filter(session="GE").values("identification", "name")
     appliance = []
     for value in values:
@@ -149,11 +149,60 @@ class MaintenanceForm(forms.Form):
     fix_date = forms.DateField()
     devices = forms.CharField(max_length=256)
 
+    def clean_phone(self):
+        try:
+            phone = self.cleaned_data['phone']
+        except Exception as e:
+            raise forms.ValidationError("无效的电话号码")
+
+        return phone
+
+    def clean_fix_address(self):
+        try:
+            address = self.cleaned_data['fix_address']
+            (province, city, county) = address.split(" ")
+            Province.objects.get(name=province)
+            City.objects.get(name=city)
+            County.objects.get(name=county)
+        except Exception as e:
+            raise forms.ValidationError("无效的地址")
+
+        return address
+
+    def clean_devices(self):
+        """
+        设备列表必须是json格式，每个列表编码必须有效
+        :return:
+        """
+        try:
+            devices = json.load(self.cleaned_data['devices'])
+            for device in devices:
+                Equipment.objects.get(identification=device[0])
+        except Exception as e:
+            raise forms.ValidationError("无效的设备型号")
+
+        return devices
+
+
+def check_date(d):
+    """
+    检查日期 2000-01-01 至 2029-12-30
+    :param d:
+    :return:
+    """
+    import re
+    dre = re.match("^20[0-2]\d-(0[1-9]|1[0-2])-([0-2]\d|3[01])$", d)
+    return True if dre else False
+
+
 
 @csrf_exempt
 def maintenance_apply(request):
     mutable_post = request.POST.copy() if request.method == 'POST' else request.GET.copy()
+    if not check_date(mutable_post["fix_date"]):
+        raise forms.ValidationError("无效的日期")
     mutable_post["fix_date"] = datetime.strptime(mutable_post["fix_date"], "%Y-%m-%d").date()
+
     f = MaintenanceForm(mutable_post)
     if f.is_valid():
         cd = f.cleaned_data
@@ -161,6 +210,7 @@ def maintenance_apply(request):
         now = datetime.now()
 
         devices = json.loads(cd['devices'])
+        # devices = cd['devices']
         for device in devices:
             equipment = Equipment.objects.get(identification=device[0])
             ma = MaintenanceAuxiliary(uuid=guid, equipment=equipment, number=device[1])
@@ -177,8 +227,7 @@ def maintenance_apply(request):
         errors = None
     else:
         errors = f.errors
-    # device_number = models.ManyToManyField(MaintenanceAuxiliary, verbose_name="设备及数量")
-    # print json.loads(request.POST.get('devices'))
+
     return render_to_response('maintenance_apply.html', {"yes": True, "errors": errors})
 
 
