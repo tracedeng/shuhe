@@ -149,6 +149,13 @@ class MaintenanceForm(forms.Form):
     fix_date = forms.DateField()
     devices = forms.CharField(max_length=256)
 
+    @classmethod
+    def errors_label(cls, msg):
+        for key in cls.declared_fields.keys():
+            msg.replace("key", cls.declared_fields[key].label)
+
+        return msg
+
     def clean_phone(self):
         """
         检查输入的手机号码，小于11位无效
@@ -157,7 +164,7 @@ class MaintenanceForm(forms.Form):
         try:
             phone = self.cleaned_data['phone']
             if len(phone) < 11:
-                raise BaseException()
+                raise ValueError()
         except Exception as e:
             raise forms.ValidationError("无效的电话号码")
 
@@ -194,11 +201,11 @@ class MaintenanceForm(forms.Form):
         try:
             devices = json.loads(self.cleaned_data['devices'])
             if not devices:
-                raise BaseException("")
+                raise ValueError()
             for device in devices:
                 Equipment.objects.get(identification=device[0])
-        except BaseException as e:
-            raise forms.ValidationError("这个字段必须填")
+        except ValueError as e:
+            raise forms.ValidationError("这个字段是必填项")
         except Exception as e:
             raise forms.ValidationError("无效的设备型号")
 
@@ -231,7 +238,7 @@ def maintenance_apply(request):
         except Exception as e:
             return render_to_response('maintenance_apply.html', {"yes": False})
     else:
-        return render_to_response('maintenance_apply.html', {"errors": f.errors})
+        return render_to_response('maintenance_apply.html', {"errors": MaintenanceForm.errors_label(f.errors)})
 
 
 class AgentForm(forms.Form):
