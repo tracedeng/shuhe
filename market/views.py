@@ -169,6 +169,17 @@ class MaintenanceForm(forms.Form):
 
         return address
 
+    # def clean_fix_date(self):
+    #     try:
+    #         import re
+    #         dre = re.match("^20[0-2]\d-(0[1-9]|1[0-2])-([0-2]\d|3[01])$", d)
+    #         return True if dre else False
+    #
+    #     except Exception as e:
+    #         raise forms.ValidationError("无效的地址")
+    #
+    #     return address
+
     def clean_devices(self):
         """
         设备列表必须是json格式，每个列表编码必须有效
@@ -176,6 +187,8 @@ class MaintenanceForm(forms.Form):
         """
         try:
             devices = json.load(self.cleaned_data['devices'])
+            if not devices:
+                forms.ValidationError("这个字段必须填")
             for device in devices:
                 Equipment.objects.get(identification=device[0])
         except Exception as e:
@@ -184,34 +197,34 @@ class MaintenanceForm(forms.Form):
         return devices
 
 
-def check_date(d):
-    """
-    检查日期 2000-01-01 至 2029-12-30
-    :param d:
-    :return:
-    """
-    import re
-    dre = re.match("^20[0-2]\d-(0[1-9]|1[0-2])-([0-2]\d|3[01])$", d)
-    return True if dre else False
-
-
-
+# def check_date(d):
+#     """
+#     检查日期 2000-01-01 至 2029-12-30
+#     :param d:
+#     :return:
+#     """
+#     import re
+#     dre = re.match("^20[0-2]\d-(0[1-9]|1[0-2])-([0-2]\d|3[01])$", d)
+#     return True if dre else False
+#
+#
+#
 @csrf_exempt
 def maintenance_apply(request):
-    mutable_post = request.POST.copy() if request.method == 'POST' else request.GET.copy()
-    if not check_date(mutable_post["fix_date"]):
-        raise forms.ValidationError("无效的日期")
-    mutable_post["fix_date"] = datetime.strptime(mutable_post["fix_date"], "%Y-%m-%d").date()
+    # mutable_post = request.POST.copy() if request.method == 'POST' else request.GET.copy()
+    # if not check_date(mutable_post["fix_date"]):
+    #     raise forms.ValidationError("无效的日期")
+    # mutable_post["fix_date"] = datetime.strptime(mutable_post["fix_date"], "%Y-%m-%d").date()
 
-    f = MaintenanceForm(mutable_post)
+    f = MaintenanceForm(request.POST.copy())
     if f.is_valid():
         cd = f.cleaned_data
         guid = uuid.uuid1()
         now = datetime.now()
 
-        devices = json.loads(cd['devices'])
+        # devices = json.loads(cd['devices'])
         # devices = cd['devices']
-        for device in devices:
+        for device in cd['devices']:
             equipment = Equipment.objects.get(identification=device[0])
             ma = MaintenanceAuxiliary(uuid=guid, equipment=equipment, number=device[1])
             ma.save()
