@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-from django.shortcuts import render, render_to_response, HttpResponseRedirect
+from django.shortcuts import render, render_to_response
+from django.utils.html import format_html
 
 # Create your views here.
 from models import Softener, Purifier, Drinking
@@ -144,17 +145,17 @@ def counties(request):
 
 class MaintenanceForm(forms.Form):
     name = forms.CharField(max_length=32, label="姓名")
-    phone = forms.CharField(max_length=16)
-    fix_address = forms.CharField(max_length=64)
-    fix_date = forms.DateField()
-    devices = forms.CharField(max_length=256)
+    phone = forms.CharField(max_length=16, label="电话号码")
+    fix_address = forms.CharField(max_length=64, label="安装地址")
+    fix_date = forms.DateField(label="安装日期")
+    devices = forms.CharField(max_length=256, label="设备列表")
 
     @classmethod
-    def errors_label(cls, msg):
+    def errors_label(cls, error):
         for key in cls.declared_fields.keys():
-            msg.replace("key", cls.declared_fields[key].label)
+            msg = msg.replace(key, cls.declared_fields[key].label)
 
-        return msg
+        return format_html(msg)
 
     def clean_phone(self):
         """
@@ -238,7 +239,7 @@ def maintenance_apply(request):
         except Exception as e:
             return render_to_response('maintenance_apply.html', {"yes": False})
     else:
-        return render_to_response('maintenance_apply.html', {"errors": MaintenanceForm.errors_label(f.errors)})
+        return render_to_response('maintenance_apply.html', {"errors": MaintenanceForm.errors_label(str(f.errors))})
 
 
 class AgentForm(forms.Form):
