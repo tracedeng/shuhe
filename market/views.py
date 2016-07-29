@@ -151,7 +151,7 @@ class MaintenanceForm(forms.Form):
     devices = forms.CharField(max_length=256, label="设备列表")
 
     @classmethod
-    def errors_label(cls, error):
+    def errors_label(cls, msg):
         for key in cls.declared_fields.keys():
             msg = msg.replace(key, cls.declared_fields[key].label)
 
@@ -252,38 +252,28 @@ class AgentForm(forms.Form):
 def order(request):
     if request.method == 'GET':
         # 从微信菜单跳转过来
-        # 获取openid
         code = request.GET.get("code")
-        conn = httplib.HTTPSConnection("api.weixin.qq.com")
-        url = "/sns/oauth2/access_token?appid=wxe577b89ef194f974&secret=22c12dfc8ab1f4717238e8a909947748" \
-              "&code=%s&grant_type=authorization_code" % code
-        conn.request("GET", url)
-        res = conn.getresponse()
-        if res.status == 200:
-            result = json.loads(res.read())
-            openid = result.get("openid", None)
-            if openid:
-                # 验证是否已经绑定的openid
-                try:
-                    agent = Agent.objects.get(wechat=openid)
-                    provinces = Province.objects.values("name")
-                    devices = get_devices()
-                    return render_to_response("order.html", {"name": agent.name, "phone": agent.phone, "openid": openid,
-                                                             'provinces': provinces, "appliance": devices['appliance'],
-                                                             "equipment": devices['equipment']})
-                except Exception as e:
-                    return render_to_response('login.html', {'openid': openid})
-            else:
-                return render_to_response('login.html')
-
-        return render_to_response('login.html')
+        openid = Wechat.openid(code)
+        if openid:
+            # 验证是否已经绑定的openid
+            try:
+                agent = Agent.objects.get(wechat=openid)
+                provinces = Province.objects.values("name")
+                devices = get_devices()
+                return render_to_response("order.html", {"name": agent.name, "phone": agent.phone, "openid": openid,
+                                                         'provinces': provinces, "appliance": devices['appliance'],
+                                                         "equipment": devices['equipment']})
+            except Exception as e:
+                return render_to_response('login.html', {'openid': openid})
+        else:
+            return render_to_response('login.html')
     else:
         # 登录，先保存Agent
         f = AgentForm(request.POST)
         if f.is_valid():
             cd = f.cleaned_data
-            # 验证伙伴
             try:
+                # 绑定合作伙伴openid
                 agent = Agent.objects.get(name=cd['name'], phone=cd['phone'])
                 agent.wechat = cd['openid']
                 agent.save()
@@ -302,48 +292,100 @@ def order(request):
 
 class OrderForm(forms.Form):
     name = forms.CharField(max_length=32, label="姓名")
-    phone = forms.CharField(max_length=16)
+    phone = forms.CharField(max_length=16, label="电话号码")
+    receipt_address = forms.CharField(max_length=64, label="收货地址")
+    receipt_date = forms.DateField(label="到货日期")
+    devices = forms.CharField(max_length=256, label="设备列表")
     openid = forms.CharField(max_length=64)
-    receipt_address = forms.CharField(max_length=64)
-    receipt_date = forms.DateField()
-    devices = forms.CharField(max_length=256)
+
+    @classmethod
+    def errors_label(cls, msg):
+        for key in cls.declared_fields.keys():
+            msg = msg.replace(key, cls.declared_fields[key].label)
+
+        return format_html(msg)
+
+    def clean_phone(self):
+        """
+        检查输入的手机号码，小于11位无效
+        :return:
+        """
+        try:
+            phone = self.cleaned_data['phone']
+            if len(phone) < 11:
+                raise ValueError()
+        except Exception as e:
+            raise forms.ValidationError("无效的电话号码")
+
+        return phone
+
+    def clean_receipt_address(self):
+        try:
+            address = self.cleaned_data['fix_address']
+            (province, city, county) = address.split(" ")
+            Province.objects.get(name=province)
+            City.objects.get(name=city)
+            County.objects.get(name=county)
+        except Exception as e:
+            raise forms.ValidationError("无效的收货地址")
+
+        return address
+
+    def clean_devices(self):
+        """
+        设备列表必须是json格式，每个列表编码必须有效
+        :return: json格式的devices
+        """
+        try:
+            devices = json.loads(self.cleaned_data['devices'])
+            if not devices:
+                raise ValueError()
+            for device in devices:
+                Equipment.objects.get(identification=device[0])
+        except ValueError as e:
+            raise forms.ValidationError("这个字段是必填项")
+        except Exception as e:
+            raise forms.ValidationError("无效的设备型号")
+
+        return devices
 
 
 @csrf_exempt
 def place_order(request):
     # 下订单
-    mutable_post = request.POST.copy() if request.method == 'POST' else request.GET.copy()
-    mutable_post["receipt_date"] = datetime.strptime(mutable_post["receipt_date"], "%Y-%m-%d").date()
-    f = OrderForm(mutable_post)
+    f = OrderForm(request.POST.copy())
     if f.is_valid():
         cd = f.cleaned_data
         guid = uuid.uuid1()
         now = datetime.now()
 
-        devices = json.loads(cd['devices'])
-        bill = 0
-        for device in devices:
-            equipment = Equipment.objects.get(identification=device[0])
-            bill = bill + equipment.price
-            oa = OrderAuxiliary(uuid=guid, equipment=equipment, number=device[1])
-            oa.save()
+        # devices = json.loads(cd['devices'])
+        try:
+            bill = 0
+            oas = []
+            for device in cd['devices']:
+                equipment = Equipment.objects.get(identification=device[0])
+                bill = bill + equipment.price
+                oa = OrderAuxiliary(uuid=guid, equipment=equipment, number=device[1])
+                oas.append(oa)
+                oa.save()
 
-        agent = Agent.objects.get(name=cd['name'], phone=cd['phone'])
-        m = Order(agent=agent, receipt_address=cd["receipt_address"], receipt_date=cd["receipt_date"],
-                  order_time=now, uuid=guid, payed="no", shipped="no", valid="valid")
-        m.save()
+            agent = Agent.objects.get(name=cd['name'], phone=cd['phone'])
+            m = Order(agent=agent, receipt_address=cd["receipt_address"], receipt_date=cd["receipt_date"],
+                      order_time=now, uuid=guid, payed="no", shipped="no", valid="valid")
+            m.save()
 
-        # 多对多关系
-        oas = OrderAuxiliary.objects.filter(uuid=guid)
-        for oa in oas:
-            m.auxiliary.add(oa)
+            # 多对多关系
+            # oas = OrderAuxiliary.objects.filter(uuid=guid)
+            for oa in oas:
+                m.auxiliary.add(oa)
 
-        return {"error": 0, "trade_no": guid, "bill": bill, "openid": cd["openid"]}
+            return {"error": 0, "trade_no": guid, "bill": bill, "openid": cd["openid"]}
+        except Exception as e:
+            return {"error": 2}
     else:
         # errors = f.errors
         return {"error": 1}
-
-    # return render_to_response('maintenance_apply.html', {"yes": True, "errors": errors})
 
 
 @csrf_exempt

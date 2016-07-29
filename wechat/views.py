@@ -60,6 +60,24 @@ class Wechat:
         self.appid = "wxe577b89ef194f974"
         self.secret = "22c12dfc8ab1f4717238e8a909947748"
 
+    def openid(self, code):
+        """
+        后去openid
+        :param code: 菜单跳转带的code
+        :return: 获取失败/None, 获取成功/“openid”
+        """
+        # https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE
+        #       &grant_type=authorization_code
+        url = "/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code" \
+              % (self.appid, self.secret, code)
+        result = curl_wrapper(url)
+        if result:
+            openid = result.get("openid", None)
+        else:
+            openid = None
+
+        return openid
+
     def access_token(self):
         """
         获取access_token

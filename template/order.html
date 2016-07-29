@@ -98,12 +98,10 @@
                                 <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>选择产品型号
                             </button>
                         </form>
-                        <br />
-                        <br />
-                        <button type="submit" class="btn btn-success btn-submit">
-                            提交订单
-                        </button>
                     </div>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-primary btn-submit">提交订单</button>
                 </div>
             </div>
             <!--<button type="button" class="btn btn-default" data-toggle="modal" data-target=".modal">modal</button>-->
@@ -203,7 +201,7 @@
                             if(data.length > 0)
                             {
                                 $("#city").html(data);
-                                $("#county").html("<option>--选择区县--</option>");
+                                $("#county").html("<option>-选择区县-</option>");
                             }
                         },
                     })
@@ -280,7 +278,11 @@
                 var name = $(".input-owner input")[0].value;
                 var phone = $(".input-phone input")[0].value;
                 var openid = $(".input-openid input")[0].value;
-                var address = Array($("#province option:selected").text(), $("#city option:selected").text(), $("#county option:selected").text()).join('');
+                var address = ""
+                if ($("#province option:selected").index() && $("#city option:selected").index() && $("#county option:selected").index())
+                {
+                    address = Array($("#province option:selected").text(), $("#city option:selected").text(), $("#county option:selected").text()).join(' ');
+                }
                 var receipt_date = $(".date input")[0].value;   // 读input的value
                 var devices = Array();
                 $.each($(".checked-device .list-group-item"), function(i, item){
