@@ -125,8 +125,9 @@
                                 // 重定向
                                 break;
                             case 1:
+                                var error = data.msg
                                 $(".alert-detail strong").text("提示！");
-                                $(".alert-text").text("这组没有用户");
+                                $(".alert-text").text(error);
                                 $(".alert").removeClass("hidden");
                                 setTimeout('$(".alert").alert("close")',3000)
                                 break;

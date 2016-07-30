@@ -286,7 +286,7 @@ def login(request):
             # return render_to_response("order.html", {"name": cd['name'], "phone": cd['phone'], "openid": cd['openid'],
             #                                          'provinces': provinces, "appliance": devices['appliance'],
             #                                          "equipment": devices['equipment']})
-            return HttpResponse(json.dumps({"errcode": 1}), content_type="application/json")  # 前端跳转到/o
+            return HttpResponse(json.dumps({"errcode": 0}), content_type="application/json")  # 前端跳转到/o
         except Exception as e:
             errors = "您不是有效的合作伙伴。"
             # return render_to_response('login.html', {"errors": errors, 'openid': cd['openid']})
@@ -294,7 +294,12 @@ def login(request):
     else:
         # errors = ["输入有误，请检查。"]
         # return render_to_response('login.html', {"errors": errors, 'openid': cd['openid']})
-        return HttpResponse(json.dumps({"errcode": 1, "msg": f.errors}), content_type="application/json")
+        errors = "请检查输入的信息。"
+        if f["name"].errors:
+            errors = "请输入有效的用户名。"
+        elif f["phone"].errors:
+            errors = "请输入有效的手机号码。"
+        return HttpResponse(json.dumps({"errcode": 1, "msg": errors}), content_type="application/json")
 
 
 class OrderForm(forms.Form):
