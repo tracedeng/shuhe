@@ -1,5 +1,13 @@
 {% extends "bootstrap.html" %}
 
+{% block headstyle %}
+
+.panel {
+    margin-top: 10px;
+}
+
+{% endblock %}
+
 {% block title %}订单提交结果{% endblock %}
 
 {% block body %}
@@ -16,6 +24,9 @@
                         <button type="button" class="btn btn-success btn-pay">
                             微信支付
                         </button>
+                        <button type="button" class="btn btn-success btn-future">
+                            退出
+                        </button>
                     </div>
                 </div>
             </div>
@@ -28,16 +39,21 @@
     <script type="text/javascript">
         $(function(){
             $(".btn-pay").click(function(e){
+                //alert("prepay_id={{ signature_order.prepay_id }}" + "-" + "{{ signature_order.timestamp }}" + "-" + "{{ signature_order.nonce_str }}" + "-" + "{{ signature_order.sign }}")
                 wx.chooseWXPay({
-                    timestamp: {{ signature_order.timestamp }},
+                    timestamp: signature_order.timestamp,
                     nonceStr: '{{ signature_order.nonce_str }}',
                     package: 'prepay_id={{ signature_order.prepay_id }}', // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
                     signType: 'MD5',
-                    paySign: 'signature_order.sign',
+                    paySign: '{{ signature_order.sign }}',
                     success: function (res) {
                         // 支付成功后的回调函数
                     }
                 });
+            });
+
+            $(".btn-future").click(function(e){
+                wx.closeWindow();
             });
 
             wx.config({
