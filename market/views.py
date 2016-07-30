@@ -242,53 +242,58 @@ def maintenance_apply(request):
         return render_to_response('maintenance_apply.html', {"errors": MaintenanceForm.errors_label(str(f.errors))})
 
 
+@csrf_exempt
+def order(request):
+    # 从微信菜单跳转过来
+    code = request.GET.get("code")
+    openid = Wechat().openid(code)
+
+    try:
+        agent = Agent.objects.get(wechat=openid)
+        provinces = Province.objects.values("name")
+        devices = get_devices()
+        return render_to_response("order.html", {"name": agent.name, "phone": agent.phone, "openid": openid,
+                                                 'provinces': provinces, "appliance": devices['appliance'],
+                                                 "equipment": devices['equipment']})
+    except Exception as e:
+        if openid:
+            return render_to_response('login.html', {'openid': openid})
+        else:
+            return render_to_response('openid.html')
+
+
 class AgentForm(forms.Form):
     name = forms.CharField(max_length=32, label="姓名")
-    phone = forms.CharField(max_length=16)
-    openid = forms.CharField(max_length=64)
+    phone = forms.CharField(max_length=16, label="电话号码")
+    openid = forms.CharField(max_length=64, label="openid")
 
 
 @csrf_exempt
-def order(request):
-    if request.method == 'GET':
-        # 从微信菜单跳转过来
-        code = request.GET.get("code")
-        openid = Wechat().openid(code)
-        if openid:
-            # 验证是否已经绑定的openid
-            try:
-                agent = Agent.objects.get(wechat=openid)
-                provinces = Province.objects.values("name")
-                devices = get_devices()
-                return render_to_response("order.html", {"name": agent.name, "phone": agent.phone, "openid": openid,
-                                                         'provinces': provinces, "appliance": devices['appliance'],
-                                                         "equipment": devices['equipment']})
-            except Exception as e:
-                return render_to_response('login.html', {'openid': openid})
-        else:
-            return render_to_response('login.html')
-    else:
-        # 登录，先保存Agent
-        f = AgentForm(request.POST)
-        cd = f.cleaned_data
-        if f.is_valid():
-            try:
-                # 绑定合作伙伴openid
-                agent = Agent.objects.get(name=cd['name'], phone=cd['phone'])
-                agent.wechat = cd['openid']
-                agent.save()
+def login(request):
+    # 登录，先保存Agent
+    f = AgentForm(request.POST)
+    if f.is_valid():
+        try:
+            cd = f.cleaned_data
+            # 绑定合作伙伴openid
+            agent = Agent.objects.get(name=cd['name'], phone=cd['phone'])
+            agent.wechat = cd['openid']
+            agent.save()
 
-                provinces = Province.objects.values("name")
-                devices = get_devices()
-                return render_to_response("order.html", {"name": cd['name'], "phone": cd['phone'], "openid": cd['openid'],
-                                                         'provinces': provinces,"appliance": devices['appliance'],
-                                                         "equipment": devices['equipment']})
-            except Exception as e:
-                errors = ["您不是有效的合作伙伴。"]
-                return render_to_response('login.html', {"errors": errors, 'openid': cd['openid']})
-        else:
-            errors = ["输入有误，请检查。"]
-            return render_to_response('login.html', {"errors": errors, 'openid': cd['openid']})
+            # provinces = Province.objects.values("name")
+            # devices = get_devices()
+            # return render_to_response("order.html", {"name": cd['name'], "phone": cd['phone'], "openid": cd['openid'],
+            #                                          'provinces': provinces, "appliance": devices['appliance'],
+            #                                          "equipment": devices['equipment']})
+            return {"errcode": 0}  # 前端跳转到/o
+        except Exception as e:
+            errors = "您不是有效的合作伙伴。"
+            # return render_to_response('login.html', {"errors": errors, 'openid': cd['openid']})
+            return {"errcode": 1, "msg": errors}
+    else:
+        # errors = ["输入有误，请检查。"]
+        # return render_to_response('login.html', {"errors": errors, 'openid': cd['openid']})
+        return {"errcode": 1, "msg": f.errors}
 
 
 class OrderForm(forms.Form):

@@ -30,6 +30,7 @@ urlpatterns = [
     url(r'^city$', views.cities),
     url(r'^county$', views.counties),
     url(r'^o', views.order),
+    url(r'^login', views.login),
     url(r'^po', views.place_order),
     url(r'^pay', views.pay),
     url(r'^notice', views.pay_notice),

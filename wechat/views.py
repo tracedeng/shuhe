@@ -160,7 +160,7 @@ class Wechat:
         """
         url = "/pay/unifiedorder"
         notify_url = "http://www.shuhe-home.com/notice"
-        pay_key = "ytgikJDanShIlinO1tgikJDnShIlin10"
+        pay_key = "gmgm201607292034gmgm201607292034"
         nonce = str(uuid.uuid1())[0:16]
         d = {"appid": self.appid, "mch_id": "1362765402", "device_info": "WEB", "nonce_str": nonce,
              "body": activity_name, "out_trade_no": out_trade_no, "total_fee": total_fee, "openid": openid,
