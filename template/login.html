@@ -21,9 +21,9 @@
                 <div class="panel panel-default">
                     <div class="panel-heading text-center">填写真实姓名和手机号</div>
                     <div class="panel-body query">
-                        <div class="alert alert-warning alert-dismissible" role="alert">
+                        <div class="alert alert-warning alert-dismissible hidden" role="alert">
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <strong>Warning!</strong> Better check yourself, you're not looking too good.
+                            <!--<strong>Warning!</strong> Better check yourself, you're not looking too good.-->
                             <span class="alert-detail"><strong>警告!</strong><span class="alert-text">请填写完整信息</span></span>
                         </div>
                         <!--{% if errors %}-->
@@ -99,6 +99,13 @@
 {% block bodyscript %}
     <script type="text/javascript">
         $(function(){
+            //阻止点击警告框关闭按钮时的缺省操作，保留警告框内容
+            $(".alert").on("close.bs.alert", function(e) {
+                e.preventDefault();
+                $(this).addClass("hidden");
+                return ;
+            });
+
             // 登录
             $(".btn-submit").click(function(e){
                 // 姓名

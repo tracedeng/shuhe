@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render, render_to_response
 from django.utils.html import format_html
+from django.http import HttpResponse
 
 # Create your views here.
 from models import Softener, Purifier, Drinking
@@ -285,15 +286,15 @@ def login(request):
             # return render_to_response("order.html", {"name": cd['name'], "phone": cd['phone'], "openid": cd['openid'],
             #                                          'provinces': provinces, "appliance": devices['appliance'],
             #                                          "equipment": devices['equipment']})
-            return {"errcode": 0}  # 前端跳转到/o
+            return HttpResponse(json.dumps({"errcode": 1}), content_type="application/json")  # 前端跳转到/o
         except Exception as e:
             errors = "您不是有效的合作伙伴。"
             # return render_to_response('login.html', {"errors": errors, 'openid': cd['openid']})
-            return {"errcode": 1, "msg": errors}
+            return HttpResponse(json.dumps({"errcode": 1, "msg": errors}), content_type="application/json")
     else:
         # errors = ["输入有误，请检查。"]
         # return render_to_response('login.html', {"errors": errors, 'openid': cd['openid']})
-        return {"errcode": 1, "msg": f.errors}
+        return HttpResponse(json.dumps({"errcode": 1, "msg": f.errors}), content_type="application/json")
 
 
 class OrderForm(forms.Form):
