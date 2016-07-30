@@ -1,11 +1,15 @@
 {% extends "bootstrap.html" %}
 
-{% block headstyle %}
+{% load staticfiles %}
 
+{% block headstyle %}
 .panel {
     margin-top: 10px;
 }
+{% endblock %}
 
+{% block extscript %}
+<script type="text/javascript" src="{% static 'js/jweixin-1.0.0.js' %}"></script>
 {% endblock %}
 
 {% block title %}订单提交结果{% endblock %}
@@ -21,10 +25,10 @@
                             你的订单已提交成功，现在您可以选择微信支付。
                         </p>
                         <br />
-                        <button type="button" class="btn btn-success btn-pay">
+                        <button type="button" class="btn btn-primary btn-pay">
                             微信支付
                         </button>
-                        <button type="button" class="btn btn-success btn-future">
+                        <button type="button" class="btn btn-primary btn-future">
                             退出
                         </button>
                     </div>
@@ -41,7 +45,7 @@
             $(".btn-pay").click(function(e){
                 //alert("prepay_id={{ signature_order.prepay_id }}" + "-" + "{{ signature_order.timestamp }}" + "-" + "{{ signature_order.nonce_str }}" + "-" + "{{ signature_order.sign }}")
                 wx.chooseWXPay({
-                    timestamp: signature_order.timestamp,
+                    timestamp: {{ signature_order.timestamp }},
                     nonceStr: '{{ signature_order.nonce_str }}',
                     package: 'prepay_id={{ signature_order.prepay_id }}', // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
                     signType: 'MD5',
@@ -57,7 +61,7 @@
             });
 
             wx.config({
-                debug: true,
+                debug: false,
                 appId: '{{ signature.appid }}',
                 timestamp: '{{ signature.timestamp }}',
                 nonceStr: '{{ signature.noncestr }}',
