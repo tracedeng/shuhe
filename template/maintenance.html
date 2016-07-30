@@ -135,7 +135,7 @@
                 </div>
                 <div class="modal-footer">
                     <div class="btn-group">
-                        <button type="button" class="btn btn-danger btn-sm btn-confirm">确认
+                        <button type="button" class="btn btn-primary btn-sm btn-confirm">确认
                             <!--<i class="glyphicon glyphicon-ok"></i>-->
                         </button>
                         <button type="button" class="btn btn-warning btn-sm btn-cancel">取消
@@ -154,14 +154,14 @@
                     <!--<span aria-hidden="true">&times;</span>-->
                     <!--<span class="sr-only">Close</span>-->
                 <!--</button>-->
-                <h3 class="modal-title">官方维保提交结果</h3>
+                <h3 class="modal-title">提交结果</h3>
             </div>
             <div class="modal-body modal-body-feedback">
                 <!--<p>你的维保申请已提交成功，工作人员正在处理。</p>-->
             </div>
             <div class="modal-footer">
                 <div class="btn-group">
-                    <button type="button" class="btn btn-warning btn-sm btn-cancel-feedback">确认
+                    <button type="button" class="btn btn-primary btn-sm btn-cancel-feedback">确认
                         <!--<i class="glyphicon glyphicon-ok"></i>-->
                     </button>
                     <!--<button type="button" class="btn btn-warning btn-sm btn-cancel">取消-->
@@ -294,7 +294,7 @@
                             $(".modal-feedback").modal("show");
                             $(".btn-cancel-feedback").click(function(e){
                                 $(".modal-feedback").modal("hide");
-                                wx.closeWindow();
+                                //wx.closeWindow();
                             });
                         }
                     },

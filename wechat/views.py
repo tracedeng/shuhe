@@ -176,7 +176,7 @@ class Wechat:
         if prepay_id:
             timestamp = int(time.time())
             pay_sign = self.signature2({"nonceStr": nonce, "signType": "MD5", "package": "prepay_id=%s" % (prepay_id,),
-                                        "timestamp": timestamp}, pay_key)
+                                        "timeStamp": timestamp, "appId": self.appid}, pay_key)
             return {"prepay_id": prepay_id, "nonce_str": nonce, "sign": pay_sign, "timestamp": timestamp}
         else:
             return None

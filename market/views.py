@@ -377,7 +377,6 @@ def place_order(request):
         guid = uuid.uuid1()
         now = datetime.now()
 
-        # devices = json.loads(cd['devices'])
         try:
             bill = 0
             oas = []
@@ -387,6 +386,7 @@ def place_order(request):
                 oa = OrderAuxiliary(uuid=guid, equipment=equipment, number=device[1])
                 oas.append(oa)
                 oa.save()
+            bill *= 100  # 微信以分为单位
 
             agent = Agent.objects.get(name=cd['name'], phone=cd['phone'])
             m = Order(agent=agent, receipt_address=cd["receipt_address"], receipt_date=cd["receipt_date"],
