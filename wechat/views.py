@@ -35,7 +35,7 @@ def curl_wrapper(url, domain="api.weixin.qq.com"):
         return None
 
 
-def curl_wrapper_post(url, domain="api.weixin.qq.com", param=None, headers=None):
+def curl_wrapper_post(url, domain="api.weixin.qq.com", params=None, headers=None):
     """
     wechat api 请求，
     :param url:
@@ -44,7 +44,7 @@ def curl_wrapper_post(url, domain="api.weixin.qq.com", param=None, headers=None)
     """
     try:
         conn = httplib.HTTPSConnection(domain)
-        conn.request("POST", url, param, headers)
+        conn.request("POST", url, params, headers)
         res = conn.getresponse()
         if res.status == 200:
             result = parse(res.read())
@@ -200,4 +200,4 @@ if "__main__" == __name__:
     wechat = Wechat()
     # signature = wechat.signature("http://www.shuhe-home.com/m")
     # print(signature)
-    wechat.unified_order("name", "2123", "100", "192.168.1.1", "jifwfwefwef")
+    wechat.unified_order("hello", "2123", "100", "192.168.1.1", "jifwfwefwef")

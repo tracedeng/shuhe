@@ -16,8 +16,15 @@ from django.views.decorators.csrf import csrf_exempt
 from django import forms
 import json
 import uuid
-import httplib
 from datetime import datetime
+
+
+def uuid2str(_uuid):
+    return str(_uuid).replace("-", "")
+
+
+def str2uuid(_str):
+    return ""
 
 
 def appliances(request):
@@ -307,7 +314,7 @@ class OrderForm(forms.Form):
     receipt_address = forms.CharField(max_length=64, label="收货地址")
     receipt_date = forms.DateField(label="到货日期")
     devices = forms.CharField(max_length=256, label="设备列表")
-    openid = forms.CharField(max_length=64)
+    openid = forms.CharField(max_length=64, label="openid")
 
     @classmethod
     def errors_label(cls, msg):
@@ -332,7 +339,7 @@ class OrderForm(forms.Form):
 
     def clean_receipt_address(self):
         try:
-            address = self.cleaned_data['fix_address']
+            address = self.cleaned_data['receipt_address']
             (province, city, county) = address.split(" ")
             Province.objects.get(name=province)
             City.objects.get(name=city)
@@ -376,7 +383,7 @@ def place_order(request):
             oas = []
             for device in cd['devices']:
                 equipment = Equipment.objects.get(identification=device[0])
-                bill = bill + equipment.price
+                bill += int(equipment.price) * int(device[1])
                 oa = OrderAuxiliary(uuid=guid, equipment=equipment, number=device[1])
                 oas.append(oa)
                 oa.save()
@@ -391,22 +398,22 @@ def place_order(request):
             for oa in oas:
                 m.auxiliary.add(oa)
 
-            return HttpResponse(json.dumps({"errcode": 0, "trade_no": guid, "bill": bill, "openid": cd["openid"]}), content_type="application/json")
+            return HttpResponse(json.dumps({"errcode": 0, "trade_no": uuid2str(guid), "bill": bill, "openid": cd["openid"]}),
+                                content_type="application/json")
         except Exception as e:
             return HttpResponse(json.dumps({"errcode": 2, "msg": "未知错误，稍候重试"}), content_type="application/json")
     else:
-        # errors = f.errors
-        return HttpResponse(json.dumps({"errcode": 1, "msg": MaintenanceForm.errors_label(str(f.errors))}), content_type="application/json")
+        return HttpResponse(json.dumps({"errcode": 1, "msg": OrderForm.errors_label(str(f.errors))}), content_type="application/json")
 
 
 @csrf_exempt
 def pay(request):
     signature = Wechat().signature(request.build_absolute_uri())
-    name = "合作伙伴下单"
+    name = "partner order"   # 合作伙伴下单
     trade_no = request.GET.get('no', '')
     fee = request.GET.get('bill', 0)
     openid = request.GET.get('openid', '')
-    signature2 = Wechat().unified_order(name, trade_no, fee, request.META.REMOTE_ADDR, openid)
+    signature2 = Wechat().unified_order(name, trade_no, fee, request.META["REMOTE_ADDR"], openid)
 
     return render_to_response('pay.html', {"signature": signature, "signature_order": signature2})
 
