@@ -306,6 +306,12 @@
                                 openid = data["openid"];
                                 redirect = "pay?no=" + trade_no + "&bill=" + bill + "&openid=" + openid;
                                 window.location = redirect;
+                            case 1:
+                                $(".modal-body-feedback").html(data)
+                                $(".modal-feedback").modal("show");
+                                $(".btn-cancel-feedback").click(function(e){
+                                    $(".modal-feedback").modal("hide");
+                                });
                             default:
                                 break;
                         }

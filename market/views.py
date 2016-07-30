@@ -391,12 +391,12 @@ def place_order(request):
             for oa in oas:
                 m.auxiliary.add(oa)
 
-            return {"error": 0, "trade_no": guid, "bill": bill, "openid": cd["openid"]}
+            return HttpResponse(json.dumps({"errcode": 0, "trade_no": guid, "bill": bill, "openid": cd["openid"]}), content_type="application/json")
         except Exception as e:
-            return {"error": 2}
+            return HttpResponse(json.dumps({"errcode": 2, "msg": "未知错误，稍候重试"}), content_type="application/json")
     else:
         # errors = f.errors
-        return {"error": 1}
+        return HttpResponse(json.dumps({"errcode": 1, "msg": MaintenanceForm.errors_label(str(f.errors))}), content_type="application/json")
 
 
 @csrf_exempt
