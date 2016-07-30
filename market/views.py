@@ -245,9 +245,13 @@ def maintenance_apply(request):
 
 @csrf_exempt
 def order(request):
-    # 从微信菜单跳转过来
-    code = request.GET.get("code")
-    openid = Wechat().openid(code)
+    code = request.GET.get("code", None)
+    if code:
+        # 从微信菜单跳转过来
+        openid = Wechat().openid(code)
+    else:
+        # 登录成功跳转
+        openid = request.GET.get("openid", None)
 
     try:
         agent = Agent.objects.get(wechat=openid)
@@ -281,11 +285,6 @@ def login(request):
             agent.wechat = cd['openid']
             agent.save()
 
-            # provinces = Province.objects.values("name")
-            # devices = get_devices()
-            # return render_to_response("order.html", {"name": cd['name'], "phone": cd['phone'], "openid": cd['openid'],
-            #                                          'provinces': provinces, "appliance": devices['appliance'],
-            #                                          "equipment": devices['equipment']})
             return HttpResponse(json.dumps({"errcode": 0}), content_type="application/json")  # 前端跳转到/o
         except Exception as e:
             errors = "您不是有效的合作伙伴。"

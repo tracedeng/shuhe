@@ -123,6 +123,8 @@
                         switch (data.errcode) {
                             case 0:
                                 // 重定向
+                                var redirect = "o?openid=" + openid;
+                                window.location = redirect;
                                 break;
                             case 1:
                                 var error = data.msg
