@@ -11,6 +11,7 @@ from models import Maintenance, MaintenanceAuxiliary
 from models import Agent
 from models import Order, OrderAuxiliary
 from region.models import Province, City, County
+from region.views import China
 from wechat.views import Wechat
 from django.views.decorators.csrf import csrf_exempt
 from django import forms
@@ -442,3 +443,11 @@ def success(request):
 
 def index(request):
     return render_to_response('index.html')
+
+
+def china(request):
+    try:
+        China().load2mysql()
+        return HttpResponse("导入成功")
+    except Exception as e:
+        return HttpResponse("导入失败")
