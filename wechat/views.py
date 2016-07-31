@@ -195,9 +195,23 @@ class Wechat:
 
         return None
 
+    def fans(self):
+        token = self.access_token()
+        if token:
+            url = "/cgi-bin/user/get?access_token=%s" % token
+            result = curl_wrapper(url)
+            if result:
+                openid = result["data"]["openid"]
+            else:
+                openid = None
+
+        return self.appid, openid
+
+
 
 if "__main__" == __name__:
     wechat = Wechat()
     # signature = wechat.signature("http://www.shuhe-home.com/m")
     # print(signature)
-    wechat.unified_order("hello", "2123", "100", "192.168.1.1", "jifwfwefwef")
+    # wechat.unified_order("hello", "2123", "100", "192.168.1.1", "jifwfwefwef")
+    print wechat.fans()

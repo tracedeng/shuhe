@@ -451,3 +451,10 @@ def china(request):
         return HttpResponse("导入成功")
     except Exception as e:
         return HttpResponse("导入失败")
+
+def get_user(request):
+    try:
+        (appid, openid) = Wechat().fans()
+        return render_to_response('user.html', {"appid": appid, "openids": openid})
+    except Exception as e:
+        return render_to_response('user.html')

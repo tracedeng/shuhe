@@ -36,6 +36,7 @@ urlpatterns = [
     url(r'^suc', views.success),
     url(r'^notice', views.pay_notice),
     url(r'^$', views.index),
-    url(r'^china$', views.china)
+    url(r'^china$', views.china),
+    url(r'^user', views.get_user)
 ]
 

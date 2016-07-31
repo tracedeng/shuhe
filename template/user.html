@@ -1,0 +1,35 @@
+{% extends "bootstrap.html" %}
+
+{% block title %}用户openids{% endblock %}
+
+{% block headstyle %}
+
+.list-group {
+    margin-top: 10px;
+}
+
+{% endblock %}
+
+{% block body %}
+    <div class="container-fluid">
+        <div class="row">
+            <!--<div class="col-md-6 col-xs-6">-->
+                <!--<a href="p/ge"><button>ge水系列</button></a>-->
+            <!--</div>-->
+            <div class="col-md-12 col-xs-12">
+                <div class="list-group">
+                    <a href="p/ge" class="list-group-item">{{ appid }}</a>
+                    {% for openid in openids %}
+                        <a href="p/ge" class="list-group-item">{{ openid }}</a>
+                    {% endfor %}
+                    <!--<a href="p/lg" class="list-group-item">台湾乐奇</a>-->
+                    <!--<a href="m" class="list-group-item">官方维保</a>-->
+                    <!--<a href="o" class="list-group-item">合作伙伴</a>-->
+                    <!--<a href="admin" class="list-group-item">后台管理</a>-->
+                    <!--&lt;!&ndash;<a href="china" class="list-group-item">导入中国城市</a>&ndash;&gt;-->
+                    <!--<a href="user" class="list-group-item">粉丝列表</a>-->
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
