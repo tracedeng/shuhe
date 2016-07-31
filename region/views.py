@@ -3,11 +3,12 @@ from django.shortcuts import render
 # Create your views here.
 from models import Province, City, County
 import json
+import os
 
 
 class China():
     def __init__(self):
-        self.path = "china.json"
+        self.path = "%s/china.json" % os.path.dirname(os.path.abspath(__file__))
 
     def load2mysql(self):
         with open(self.path) as f:
