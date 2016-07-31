@@ -387,6 +387,8 @@ def place_order(request):
                 oas.append(oa)
                 oa.save()
             bill *= 100  # 微信以分为单位
+            if bill == 0:
+                bill = 1
 
             agent = Agent.objects.get(name=cd['name'], phone=cd['phone'])
             m = Order(agent=agent, receipt_address=cd["receipt_address"], receipt_date=cd["receipt_date"],
@@ -418,6 +420,7 @@ def pay(request):
     return render_to_response('pay.html', {"signature": signature, "signature_order": signature2, "trade_no": trade_no})
 
 
+@csrf_exempt
 def pay_notice(request):
     try:
         trade_no = Wechat().notice(request.body)
@@ -431,6 +434,7 @@ def pay_notice(request):
         return render_to_response('notice_return.xml', content_type="application/xml")
 
 
+@csrf_exempt
 def success(request):
     trade_no = request.GET.get('trade_no', '')
     return render_to_response('success.html')
