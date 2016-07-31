@@ -420,13 +420,15 @@ def pay(request):
 
 def pay_notice(request):
     try:
-        trade_no = Wechat().notice(request.POST)
+        trade_no = Wechat().notice(request.body)
         if trade_no:
             trade = Order.objects.get(uuid=trade_no)
             trade.payed = "yes"
             trade.save()
+
+        return render_to_response('notice_return.xml', content_type="application/xml")
     except Exception as e:
-        pass
+        return render_to_response('notice_return.xml', content_type="application/xml")
 
 
 def success(request):

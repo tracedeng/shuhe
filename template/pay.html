@@ -45,14 +45,15 @@
             $(".btn-pay").click(function(e){
                 //alert("prepay_id={{ signature_order.prepay_id }}" + "-" + "{{ signature_order.timestamp }}" + "-" + "{{ signature_order.nonce_str }}" + "-" + "{{ signature_order.sign }}")
                 wx.chooseWXPay({
-                    timestamp: {{ signature_order.timestamp }},
+                    timestamp: '{{ signature_order.timestamp }}',
                     nonceStr: '{{ signature_order.nonce_str }}',
                     package: 'prepay_id={{ signature_order.prepay_id }}', // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
                     signType: 'MD5',
                     paySign: '{{ signature_order.sign }}',
                     success: function (res) {
                         // 支付成功后的回调函数
-                        window.location = "suc?order=" + {{ trade_no }};
+                        var redirect = "suc?order=" + "{{ trade_no }}";
+                        window.location = redirect;
                     }
                 });
             });
