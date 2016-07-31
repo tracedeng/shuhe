@@ -415,7 +415,7 @@ def pay(request):
     openid = request.GET.get('openid', '')
     signature2 = Wechat().unified_order(name, trade_no, fee, request.META["REMOTE_ADDR"], openid)
 
-    return render_to_response('pay.html', {"signature": signature, "signature_order": signature2})
+    return render_to_response('pay.html', {"signature": signature, "signature_order": signature2, "trade_no": trade_no})
 
 
 def pay_notice(request):
@@ -427,6 +427,11 @@ def pay_notice(request):
             trade.save()
     except Exception as e:
         pass
+
+
+def success(request):
+    trade_no = request.GET.get('trade_no', '')
+    return render_to_response('success.html')
 
 
 def index(request):

@@ -33,6 +33,7 @@ urlpatterns = [
     url(r'^login', views.login),
     url(r'^po', views.place_order),
     url(r'^pay', views.pay),
+    url(r'^suc', views.success),
     url(r'^notice', views.pay_notice),
     url(r'^$', views.index),
 ]
