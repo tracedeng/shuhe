@@ -12,7 +12,7 @@
 <script type="text/javascript" src="{% static 'js/jweixin-1.0.0.js' %}"></script>
 {% endblock %}
 
-{% block title %}订单提交结果{% endblock %}
+{% block title %}微信支付{% endblock %}
 
 {% block body %}
     <div class="container-fluid">
@@ -22,7 +22,7 @@
                     <div class="panel-heading text-center">微信支付</div>
                     <div class="panel-body query">
                         <p>
-                            你的订单已提交成功，现在您可以选择微信支付。
+                            <strong>你的订单已提交成功</strong>，现在您可以选择微信在线支付。
                         </p>
                         <br />
                         <button type="button" class="btn btn-primary btn-pay">
@@ -52,6 +52,7 @@
                     paySign: '{{ signature_order.sign }}',
                     success: function (res) {
                         // 支付成功后的回调函数
+                        window.location = "suc?order=" + {{ trade_no }};
                     }
                 });
             });

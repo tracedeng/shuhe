@@ -420,7 +420,7 @@ def pay(request):
 
 def pay_notice(request):
     try:
-        trade_no = Wechat.notice(request.POST)
+        trade_no = Wechat().notice(request.POST)
         if trade_no:
             trade = Order.objects.get(uuid=trade_no)
             trade.payed = "yes"
