@@ -94,5 +94,4 @@ books
 template/contact_form.html
 market/migrations
 region/migrations
-*.jpg
 *zip
