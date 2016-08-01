@@ -28,8 +28,8 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12 col-xs-12">
-                <img src="{% static '' %}img/{{ path }}/intr1.jpg" alt="">
-                <img src="{% static '' %}img/{{ path }}/intr2.jpg" alt="">
+                <img class="carousel-inner img-responsive" src="{% static '' %}img/{{ path }}/intr1.jpg" alt="">
+                <img class="carousel-inner img-responsive" src="{% static '' %}img/{{ path }}/intr2.jpg" alt="">
                 <!--{% for index in range(1, 3) %}-->
                     <img src="{% static '' %}img/{{ path }}/intr{{ index }}.jpg" alt="">
                 <!--{% endfor %}-->
@@ -55,7 +55,7 @@
                         </table>
                     </div>
                     <div role="tabpanel" class="tab-pane fade" id="softener">
-                        <table class="table table-striped table-bordered table-hover table-responsive">
+                        <table class="table table-striped table-bordered table-hover table-responsive table-condensed">
                             <tr>
                                 {% for td in spec_th %}
                                     <td>{{ td.verbose_name }}</td>
