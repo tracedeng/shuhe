@@ -28,6 +28,11 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12 col-xs-12">
+                {% for index in range(1, 3) %}
+                    <img src="{% static '' %}img/{{ path }}/intr{{ index }}.jpg" alt="">
+                {% endfor %}
+            </div>
+            <div class="col-md-12 col-xs-12">
                 <ul class="nav nav-pills">
                     <li role="presentation" class="active"><a href="#purifier" aria-controls="purifier" role="tab" data-toggle="tab">型号</a></li>
                     <li role="presentation"><a href="#softener" aria-controls="softener" role="tab" data-toggle="tab">规格</a></li>

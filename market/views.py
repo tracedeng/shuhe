@@ -78,6 +78,7 @@ def lifegear_sub(request, sub):
     :return:
     """
     ec = EquipmentCategories.objects.get(redirect=sub)  # 获取对应的大类
+    path = ec.image
     eq_set = ec.equipment_set.all()          # 获取大类所有型号
     equipment = eq_set.values("identification", "description")
 
@@ -101,7 +102,8 @@ def lifegear_sub(request, sub):
             item.append(value[field.name])
         items.append(item)
 
-    return render_to_response('equipment_sub_list.html', {"equipment": equipment, "spec_th": fields, "spec": items})
+    return render_to_response('equipment_sub_list.html', {"equipment": equipment, "spec_th": fields, "spec": items,
+                                                          "path": path})
 
 
 def get_devices():

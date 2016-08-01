@@ -6,20 +6,11 @@
 
 {% block headstyle %}
 
-.nav {
+.container-fluid {
     margin-top: 10px;
 }
 
-.tab-content {
-    margin-top: 5px;
-}
-
-.table {
-    font-size: 11px;
-}
-
-.table td,
-.table th{
+.thumbnail {
     text-align: center;
 }
 {% endblock %}
@@ -36,7 +27,7 @@
             <div class="col-md-6 col-xs-6">
                 <div class="thumbnail">
                     <a href="{{ item.redirect }}">
-                        <img src="{% static '' %}img/{{ item.image }}.png" alt="">
+                        <img src="{% static '' %}img/{{ item.image }}/nav.png" alt="">
                     </a>
                     <div class="caption">
                         <h6>{{ item.categories }}</h6>
@@ -56,7 +47,7 @@
             <div class="col-md-6 col-xs-6">
                 <div class="thumbnail">
                     <a href="{{ item.redirect }}">
-                        <img src="{% static '' %}img/{{ item.image }}.png" alt="">
+                        <img src="{% static '' %}img/{{ item.image }}/nav.png" alt="">
                     </a>
                     <div class="caption">
                         <h6>{{ item.categories }}</h6>
