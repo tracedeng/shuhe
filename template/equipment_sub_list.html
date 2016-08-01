@@ -28,9 +28,11 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12 col-xs-12">
-                {% for index in range(1, 3) %}
+                <img src="{% static '' %}img/{{ path }}/intr1.jpg" alt="">
+                <img src="{% static '' %}img/{{ path }}/intr2.jpg" alt="">
+                <!--{% for index in range(1, 3) %}-->
                     <img src="{% static '' %}img/{{ path }}/intr{{ index }}.jpg" alt="">
-                {% endfor %}
+                <!--{% endfor %}-->
             </div>
             <div class="col-md-12 col-xs-12">
                 <ul class="nav nav-pills">
