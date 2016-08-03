@@ -10,9 +10,12 @@
     margin-top: 10px;
 }
 
-.introduce,
 .tab-content {
     margin-top: 5px;
+}
+
+.top20 {
+	margin-top: 20px;
 }
 
 .table {
@@ -40,14 +43,14 @@
                 <!-- Tab panes -->
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane fade in active" id="detail">
-                        <img class="carousel-inner img-responsive" src="{% static '' %}img/{{ path }}/intr1.jpg" alt="">
+                        <img class="carousel-inner img-responsive top20" src="{% static '' %}img/{{ path }}/intr1.jpg" alt="">
                         <img class="carousel-inner img-responsive" src="{% static '' %}img/{{ path }}/intr2.jpg" alt="">
                     </div>
                     <div role="tabpanel" class="tab-pane fade" id="origin">
-                        <img class="carousel-inner img-responsive" src="{% static '' %}img/{{ path }}/origin.jpg" alt="">
+                        <img class="carousel-inner img-responsive top20" src="{% static '' %}img/{{ path }}/origin.jpg" alt="">
                     </div>
                     <div role="tabpanel" class="tab-pane fade" id="rule">
-                        <table class="table table-striped table-bordered table-hover table-responsive table-condensed">
+                        <table class="table table-striped table-bordered table-hover table-responsive table-condensed top20">
                             <tr>
                                 {% for td in spec_th %}
                                     <td>{{ td.verbose_name }}</td>
@@ -63,7 +66,7 @@
                         </table>
                     </div>
                     <div role="tabpanel" class="tab-pane fade" id="model">
-                        <table class="table table-striped table-bordered table-hover table-responsive table-condensed">
+                        <table class="table table-striped table-bordered table-hover table-responsive table-condensed top20">
                             {% for tr in equipment %}
                                 <tr>
                                 {% for td in tr.values %}
