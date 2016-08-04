@@ -94,7 +94,7 @@ class Drinking(Appliances):
 
 
 class VentilationSpec(models.Model):
-    operation_mode = models.CharField(max_length=32, verbose_name="主操作模式")
+    operation_mode = models.CharField(max_length=32, verbose_name="操作模式")
     secondary_mode = models.CharField(max_length=16, verbose_name="二级操作模式")
     power_consumption = models.CharField(max_length=16, verbose_name="消耗电量(W)")
     # price = models.BigIntegerField(verbose_name="价格")
