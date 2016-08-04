@@ -96,15 +96,15 @@ class Drinking(Appliances):
 class VentilationSpec(models.Model):
     operation_mode = models.CharField(max_length=32, verbose_name="主操作模式")
     secondary_mode = models.CharField(max_length=16, verbose_name="二级操作模式")
-    power_consumption = models.CharField(max_length=16, verbose_name="消耗电量")
+    power_consumption = models.CharField(max_length=16, verbose_name="消耗电量(W)")
     # price = models.BigIntegerField(verbose_name="价格")
 
-    ventilation_volume = models.CharField(max_length=16, verbose_name="换气风量")
-    air_volume = models.CharField(max_length=16, verbose_name="循环风量")
-    noise = models.CharField(max_length=16, verbose_name="噪音")
-    maximum_pressure = models.CharField(max_length=16, verbose_name="最大静压值")
-    host_weight = models.CharField(max_length=16, verbose_name="主机重量")
-    pipeline = models.CharField(max_length=16, verbose_name="连接管线")
+    ventilation_volume = models.CharField(max_length=16, verbose_name="换气风量(m3/h")
+    air_volume = models.CharField(max_length=16, verbose_name="循环风量(m3/h)")
+    noise = models.CharField(max_length=16, verbose_name="噪音(dB)")
+    maximum_pressure = models.CharField(max_length=16, verbose_name="最大静压值(Pa)")
+    host_weight = models.CharField(max_length=16, verbose_name="主机重量(kg)")
+    pipeline = models.CharField(max_length=16, verbose_name="连接管线(mm)")
     size = models.CharField(max_length=32, verbose_name="开孔尺寸/主机尺寸/安装尺寸")
 
     equipment = models.ManyToManyField(Equipment, verbose_name='型号')
