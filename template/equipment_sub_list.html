@@ -53,15 +53,13 @@
                         <table class="table table-striped table-bordered table-hover table-responsive table-condensed top20">
                             <tr>
                                 {% for td in spec_th %}
-                                    {% if forloop.first %}
                                         {% ifequal td.name 'operation_mode' %}
                                             <td colspan="2">{{ td.verbose_name }}</td>
                                         {% else %}
-                                            <td>{{ td.verbose_name }}</td>
+                                            {% ifnotequal td.name 'secondary_mode' %}
+                                                <td>{{ td.verbose_name }}</td>
+                                            {% endifnotequal %}
                                         {% endifequal %}
-                                    {% else %}
-                                        <td>{{ td.verbose_name }}</td>
-                                    {% endif %}
                                 {% endfor %}
                             </tr>
                             {% for tr in spec %}

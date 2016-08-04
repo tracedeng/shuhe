@@ -86,7 +86,7 @@ def lifegear_sub(request, sub):
              "bd125": "VentilationSpec", "ss": "VentilationSpec", "wrv": "HeatSpec", "hrv": "HeatSpec",
              "glx": "AirSpec", "ev21": "SoundOffSpec", "ev28": "StrongSpec", "ecv": "CircularSpec", "hev": "HiddenSpec"}
 
-    hidden_field = ('id', 'equipment', 'size', 'secondary_mode')
+    hidden_field = ('id', 'equipment', 'size')
     cls_fields = eval(match[sub])._meta.get_fields()
     fields = []
     for field in cls_fields:
