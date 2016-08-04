@@ -99,8 +99,8 @@ class VentilationSpec(models.Model):
     power_consumption = models.CharField(max_length=16, verbose_name="消耗电量(W)")
     # price = models.BigIntegerField(verbose_name="价格")
 
-    ventilation_volume = models.CharField(max_length=16, verbose_name="换气风量(m3/h)")
-    air_volume = models.CharField(max_length=16, verbose_name="循环风量(m3/h)")
+    ventilation_volume = models.CharField(max_length=16, verbose_name="换气风量(m³/h)")
+    air_volume = models.CharField(max_length=16, verbose_name="循环风量(m³/h)")
     noise = models.CharField(max_length=16, verbose_name="噪音(dB)")
     maximum_pressure = models.CharField(max_length=16, verbose_name="最大静压值(Pa)")
     host_weight = models.CharField(max_length=16, verbose_name="主机重量(kg)")
@@ -114,13 +114,13 @@ class VentilationSpec(models.Model):
 
 
 class HeatSpec(models.Model):
-    air_volume = models.CharField(max_length=16, verbose_name="风量(m3/h)")
+    air_volume = models.CharField(max_length=16, verbose_name="风量(m³/h)")
     power_consumption = models.CharField(max_length=16, verbose_name="消耗电量(W)")
     noise = models.CharField(max_length=16, verbose_name="噪音(dB)")
     recovery_rate = models.CharField(max_length=16, verbose_name="温度回收率(高/中/低)")
     # price = models.BigIntegerField(verbose_name="价格")
 
-    applicable_area = models.CharField(max_length=16, verbose_name="适用面积(m3)")
+    applicable_area = models.CharField(max_length=16, verbose_name="适用面积(m³)")
     host_size = models.CharField(max_length=16, verbose_name="主机尺寸(mm)")
     maximum_pressure = models.CharField(max_length=16, verbose_name="最大静压值(Pa)")
     net_weight = models.CharField(max_length=16, verbose_name="净重(kg)")
@@ -137,7 +137,7 @@ class AirSpec(models.Model):
     hoisting_size = models.CharField(max_length=16, verbose_name="吊装尺寸(mm)")
     # price = models.BigIntegerField(verbose_name="价格")
 
-    air_volume = models.CharField(max_length=16, verbose_name="适用风量(m3/h)")
+    air_volume = models.CharField(max_length=16, verbose_name="适用风量(m³/h)")
     weight = models.CharField(max_length=16, verbose_name="重量(kg)")
     pipeline = models.CharField(max_length=16, verbose_name="连接管线(mm)")
 
@@ -150,7 +150,7 @@ class AirSpec(models.Model):
 class Ventilator(models.Model):
     voltage = models.CharField(max_length=16, verbose_name="电压(V)")
     power_consumption = models.CharField(max_length=16, verbose_name="消耗电量(W)")
-    ventilation_volume = models.CharField(max_length=16, verbose_name="换气风量(m3/h)")
+    ventilation_volume = models.CharField(max_length=16, verbose_name="换气风量(m³/h)")
     noise = models.CharField(max_length=16, verbose_name="噪音(dB)")
     # price = models.BigIntegerField(verbose_name="价格")
 
@@ -193,10 +193,10 @@ class HiddenSpec(Ventilator):
 
 class CircularSpec(models.Model):
     power_consumption = models.CharField(max_length=16, verbose_name="消耗功率(W)")
-    air_volume = models.CharField(max_length=16, verbose_name="风量(m3/h)")
+    air_volume = models.CharField(max_length=16, verbose_name="风量(m³/h)")
     noise = models.CharField(max_length=16, verbose_name="噪音(dB)")
     installation_dimensions = models.CharField(max_length=16, verbose_name="安装尺寸(mm)")
-    applicable_area = models.CharField(max_length=16, verbose_name="适用面积(m2)")
+    applicable_area = models.CharField(max_length=16, verbose_name="适用面积(m²)")
     weight = models.CharField(max_length=16, verbose_name="重量(kg)")
 
     equipment = models.ManyToManyField(Equipment, verbose_name='型号')
